@@ -82,8 +82,18 @@ function App() {
 
       // Manejar errores de la API
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al generar el análisis');
+        // Si es desarrollo local, el endpoint no existe
+        if (response.status === 404) {
+          throw new Error('Backend no disponible en desarrollo local');
+        }
+
+        // Intentar parsear el error como JSON
+        try {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al generar el análisis');
+        } catch (jsonError) {
+          throw new Error('Error de comunicación con el backend');
+        }
       }
 
       // El backend ya devuelve el JSON parseado y validado
@@ -94,7 +104,14 @@ function App() {
 
     } catch (error) {
       console.error('Error al generar reporte:', error);
-      setError(`${error.message} - Usando diálogo alternativo.`);
+
+      // Mensaje más claro para desarrollo local
+      const isDevelopment = window.location.hostname === 'localhost';
+      const errorMessage = isDevelopment
+        ? 'Desarrollo local: usando diálogo de ejemplo'
+        : `${error.message} - Usando diálogo alternativo`;
+
+      setError(errorMessage);
       setReportData(getFallbackData());
       setView('report');
     } finally {
