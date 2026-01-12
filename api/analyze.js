@@ -1,5 +1,6 @@
 /**
  * Vercel Serverless Function: Análisis de Medicamentos
+ * Formato: Conversación de Instagram DM con personajes dinámicos
  *
  * Esta función se ejecuta en el servidor de Vercel, NO en el navegador del usuario.
  * Esto protege la API key de Anthropic porque nunca se expone al cliente.
@@ -16,11 +17,217 @@
  *
  * Respuesta:
  * {
- *   "skills": [...],
- *   "dialogue": [...],
- *   "summary": "..."
+ *   "participants": [...],
+ *   "messages": [...]
  * }
  */
+
+/**
+ * Analiza los medicamentos y genera personajes dinámicamente
+ * basados en qué condiciones tratan esos medicamentos
+ */
+function analyzeSymptoms(medications) {
+  const characters = new Set(['TÚ']); // Usuario siempre presente
+  const medicationChars = [];
+
+  medications.forEach(med => {
+    const name = med.name.toLowerCase();
+
+    // Agregar el medicamento en sí como personaje
+    medicationChars.push({
+      name: `${med.name.toUpperCase()} ${med.dosage}MG`,
+      type: 'medication'
+    });
+
+    // SSRIs - Inhibidores selectivos de recaptación de serotonina
+    if (name.includes('sertralin') || name.includes('fluoxetin') ||
+        name.includes('escitalopram') || name.includes('paroxetin') ||
+        name.includes('citalopram') || name.includes('fluvoxamin')) {
+      characters.add('REGULACIÓN EMOCIONAL');
+      characters.add('SISTEMA DE ALARMA');
+    }
+
+    // SNRIs - Inhibidores de recaptación de serotonina y noradrenalina
+    if (name.includes('venlafaxin') || name.includes('duloxetin') ||
+        name.includes('desvenlafaxin')) {
+      characters.add('REGULACIÓN EMOCIONAL');
+      characters.add('SISTEMA DE ALARMA');
+      characters.add('CUERPO');
+    }
+
+    // Gabapentinoides - Para ansiedad y dolor neuropático
+    if (name.includes('pregabalin') || name.includes('gabapentin')) {
+      characters.add('SISTEMA DE ALARMA');
+      characters.add('CUERPO');
+    }
+
+    // Benzodiacepinas - Ansiolíticos
+    if (name.includes('clonazepam') || name.includes('alprazolam') ||
+        name.includes('lorazepam') || name.includes('diazepam')) {
+      characters.add('SISTEMA DE ALARMA');
+    }
+
+    // Estimulantes - Para TDAH
+    if (name.includes('metilfenidat') || name.includes('lisdexanfetamin') ||
+        name.includes('dexanfetamin') || name.includes('anfetamin')) {
+      characters.add('FUNCIÓN EJECUTIVA');
+      characters.add('ENFOQUE');
+    }
+
+    // Estabilizadores del ánimo
+    if (name.includes('litio') || name.includes('lamotrigin') ||
+        name.includes('valproat') || name.includes('carbamazepin')) {
+      characters.add('REGULACIÓN EMOCIONAL');
+      characters.add('ESTABILIZADOR DE ÁNIMO');
+    }
+
+    // Antipsicóticos atípicos
+    if (name.includes('quetiap') || name.includes('olanzap') ||
+        name.includes('aripiprazol') || name.includes('risperidon')) {
+      characters.add('FILTRO DE REALIDAD');
+      characters.add('REGULACIÓN EMOCIONAL');
+    }
+
+    // Medicamentos para el sueño
+    if (name.includes('trazodo') || name.includes('mirtazap') ||
+        name.includes('zolpidem') || name.includes('zopiclone')) {
+      characters.add('CICLO DE SUEÑO');
+      if (!name.includes('zolpidem') && !name.includes('zopiclone')) {
+        characters.add('REGULACIÓN EMOCIONAL');
+      }
+    }
+
+    // Antidepresivos atípicos
+    if (name.includes('bupropion')) {
+      characters.add('REGULACIÓN EMOCIONAL');
+      characters.add('ENFOQUE');
+    }
+  });
+
+  // Si no se detectó ningún personaje específico, usar genéricos
+  if (characters.size === 1) {
+    characters.add('MENTE');
+    characters.add('CUERPO');
+  }
+
+  return {
+    mentalAspects: Array.from(characters),
+    medications: medicationChars
+  };
+}
+
+/**
+ * Genera el prompt para Claude API con personajes dinámicos
+ */
+function generatePrompt(medications, analysis) {
+  const medList = medications
+    .map(m => `- ${m.name} ${m.dosage}mg (${m.time})`)
+    .join('\n');
+
+  const mentalAspectsList = analysis.mentalAspects.join(', ');
+  const medicationsList = analysis.medications.map(m => m.name).join(', ');
+
+  return `Genera una conversación de grupo al estilo Instagram DM sobre este régimen de medicamentos psiquiátricos.
+
+MEDICAMENTOS:
+${medList}
+
+PARTICIPANTES DE LA CONVERSACIÓN:
+Aspectos mentales: ${mentalAspectsList}
+Medicamentos como personajes: ${medicationsList}
+
+PERSONALIDADES DE LOS ASPECTOS MENTALES:
+- TÚ: El usuario, curioso, a veces ansioso, haciendo su mejor esfuerzo
+- REGULACIÓN EMOCIONAL: Amigo maduro y calmado, de apoyo, sabe que las cosas toman tiempo
+- SISTEMA DE ALARMA: Ansioso, dramático, USA MAYÚSCULAS A VECES, está aprendiendo a calmarse
+- FUNCIÓN EJECUTIVA: Olvidadizo, disperso, tratando de organizarse lo mejor posible
+- ENFOQUE: Hiperactivo cuando no está medicado, más concentrado con medicación
+- CUERPO: Reporta sensaciones físicas, directo, honesto sobre cómo se siente
+- CICLO DE SUEÑO: Cansado, quiere descansar, agradecido por la ayuda
+- FILTRO DE REALIDAD: Filosófico, con los pies en la tierra, mantiene las cosas realistas
+- ESTABILIZADOR DE ÁNIMO: Balanceado, sabio, previene extremos emocionales
+- MENTE: Genérico para procesamiento mental
+- MEDICAMENTOS: Profesionales pero amigables, educativos, específicos sobre mecanismos
+
+IMPORTANTE: Cada medicamento debe explicar específicamente cómo funciona:
+- SSRIs: Inhibición de recaptación de serotonina
+- Benzodiacepinas: Modulación de GABA
+- Estimulantes: Dopamina y noradrenalina
+- Etc.
+
+FORMATO DE LA CONVERSACIÓN:
+- Estilo Instagram DM: casual, con emojis, abreviaciones, lowercase a veces
+- Tono: Irónico pero wholesome, honesto pero de apoyo
+- Horarios: Mañana (8-9am), Mediodía (11am-1pm), Noche (8-9pm)
+- 15-25 mensajes en total
+- Mezcla de mensajes cortos (1-2 líneas) y largos (3-5 líneas)
+- Mensajes múltiples seguidos del mismo remitente (estilo Instagram)
+- Algunas reacciones con emoji (❤️, 😂, 👍)
+- Mostrar progreso desde la mañana hasta la noche
+- SER ESPECÍFICO sobre los mecanismos de los medicamentos
+- Normalizar el uso de medicación psiquiátrica
+- Español chileno casual (wn, po, cachai, brigido, etc.)
+
+CRÍTICO: Tu respuesta debe ser SOLO un objeto JSON válido. Sin markdown, sin backticks, sin texto explicativo antes o después. Empieza con { y termina con }.
+
+Genera un JSON con esta ESTRUCTURA EXACTA:
+
+{
+  "participants": [
+    {
+      "id": "tu",
+      "name": "TÚ",
+      "color": "#4F46E5",
+      "emoji": "🧠"
+    },
+    {
+      "id": "regulacion",
+      "name": "REGULACIÓN EMOCIONAL",
+      "color": "#10b981",
+      "emoji": "🎯"
+    }
+  ],
+  "messages": [
+    {
+      "time": "8:47 AM",
+      "senderId": "tu",
+      "text": "wena cabros",
+      "reactions": ["❤️"]
+    },
+    {
+      "time": "8:48 AM",
+      "senderId": "regulacion",
+      "text": "buenos días\nbueno más o menos jaja\ntomaste las pastillas?"
+    }
+  ]
+}
+
+Colores sugeridos para personajes:
+- TÚ: #4F46E5 (azul)
+- REGULACIÓN EMOCIONAL: #10b981 (verde)
+- SISTEMA DE ALARMA: #ef4444 (rojo)
+- FUNCIÓN EJECUTIVA: #8b5cf6 (morado)
+- ENFOQUE: #f59e0b (naranja)
+- CUERPO: #06b6d4 (cyan)
+- CICLO DE SUEÑO: #6366f1 (índigo)
+- FILTRO DE REALIDAD: #14b8a6 (teal)
+- ESTABILIZADOR DE ÁNIMO: #a855f7 (púrpura)
+- MEDICAMENTOS: #8b5cf6 (morado claro)
+
+Emojis sugeridos:
+- TÚ: 🧠
+- REGULACIÓN EMOCIONAL: 🎯
+- SISTEMA DE ALARMA: 🚨
+- FUNCIÓN EJECUTIVA: 📋
+- ENFOQUE: 🔍
+- CUERPO: 💪
+- CICLO DE SUEÑO: 😴
+- FILTRO DE REALIDAD: 🌍
+- ESTABILIZADOR DE ÁNIMO: ⚖️
+- MEDICAMENTOS: 💊
+
+Sin formateo markdown en tu respuesta.`;
+}
 
 export default async function handler(req, res) {
   // Solo aceptar método POST
@@ -41,46 +248,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // Construir la lista de medicamentos para el prompt
-    const medList = medications
-      .map(m => `- ${m.name} ${m.dosage}mg (${m.time})`)
-      .join('\n');
+    // Analizar medicamentos y generar personajes dinámicamente
+    const analysis = analyzeSymptoms(medications);
 
-    // Construir el prompt (mismo que antes, pero ahora en el backend)
-    const prompt = `You are generating an internal dialogue analysis for someone's psychiatric medication, styled after Disco Elysium's skill system.
-
-Medications:
-${medList}
-
-CRITICAL: Your response must be ONLY a valid JSON object. No markdown, no backticks, no explanation text before or after. Start with { and end with }.
-
-Generate a JSON response with this EXACT structure:
-
-{
-  "skills": [
-    {"name": "Emotional Regulator", "level": 4, "color": "#60a5fa"},
-    {"name": "The Catastrophizer", "level": 5, "color": "#ef4444"},
-    {"name": "Executive Function", "level": 3, "color": "#8b5cf6"},
-    {"name": "The Body", "level": 4, "color": "#10b981"}
-  ],
-  "dialogue": [
-    {"speaker": "Emotional Regulator", "text": "A complete sentence about the medication.", "color": "#60a5fa"},
-    {"speaker": "The Catastrophizer", "text": "Another complete thought.", "color": "#ef4444"}
-  ],
-  "summary": "A 2-3 sentence final assessment."
-}
-
-Requirements:
-- 4-6 internal voices in skills array
-- 5-8 dialogue exchanges
-- Each voice should have a distinct personality
-- Be specific about what these medications do
-- Disco Elysium tone: literary, darkly humorous, deeply human
-- Normalize psychiatric medication
-- No markdown formatting in your response`;
+    // Generar el prompt con los personajes dinámicos
+    const prompt = generatePrompt(medications, analysis);
 
     // Obtener la API key desde las variables de entorno
-    // En Vercel, esto se configura en el dashboard
     const apiKey = process.env.ANTHROPIC_API_KEY;
 
     if (!apiKey) {
@@ -100,7 +274,7 @@ Requirements:
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 2000,
+        max_tokens: 3000,
         messages: [
           { role: "user", content: prompt }
         ],
@@ -137,8 +311,8 @@ Requirements:
     // Parsear el JSON
     const parsedData = JSON.parse(text);
 
-    // Validar estructura
-    if (!parsedData.skills || !parsedData.dialogue || !parsedData.summary) {
+    // Validar estructura nueva (Instagram DM format)
+    if (!parsedData.participants || !parsedData.messages) {
       throw new Error('Estructura de datos inválida en la respuesta');
     }
 
