@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, MessageCircle, ArrowLeft } from 'lucide-react';
+import { Trash2, MessageCircle, ArrowLeft, Zap, ZapOff } from 'lucide-react';
 
 function App() {
   const [view, setView] = useState('manager');
@@ -12,6 +12,40 @@ function App() {
   const [name, setName] = useState('');
   const [dosage, setDosage] = useState('');
   const [time, setTime] = useState('morning');
+
+  // Feature flag: controla si usar API real o mock data
+  const [useRealAPI, setUseRealAPI] = useState(() => {
+    // En localStorage guardamos la preferencia para preview
+    const saved = localStorage.getItem('mental-health-use-real-api');
+    return saved !== null ? saved === 'true' : false;
+  });
+
+  // Detectar ambiente
+  const getEnvironment = () => {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'local';
+    }
+    // Si tiene vercel.app pero no es tu dominio custom
+    if (hostname.includes('vercel.app')) {
+      // Aquí puedes poner tu dominio de producción si tienes uno custom
+      // Por ahora asumimos que cualquier vercel.app es preview
+      return 'preview';
+    }
+    return 'production';
+  };
+
+  const environment = getEnvironment();
+  const isLocal = environment === 'local';
+  const isPreview = environment === 'preview';
+  const isProduction = environment === 'production';
+
+  // Toggle para cambiar entre API real y mock (solo en preview)
+  const toggleAPIMode = () => {
+    const newValue = !useRealAPI;
+    setUseRealAPI(newValue);
+    localStorage.setItem('mental-health-use-real-api', newValue.toString());
+  };
 
   useEffect(() => {
     loadMeds();
@@ -67,6 +101,35 @@ function App() {
     setThinking(true);
     setError(null);
 
+    // Determinar si debemos usar la API real
+    const shouldUseAPI = isProduction || (isPreview && useRealAPI);
+
+    // En local SIEMPRE usar fallback (no gastar tokens)
+    if (isLocal) {
+      console.log('🏠 Ambiente LOCAL: usando mock data');
+      setTimeout(() => {
+        setReportData(getFallbackData());
+        setView('report');
+        setThinking(false);
+      }, 1500); // Simular delay de API
+      return;
+    }
+
+    // En preview, respetar el toggle
+    if (isPreview && !useRealAPI) {
+      console.log('🔧 Preview con MOCK DATA activado');
+      setTimeout(() => {
+        setError('Preview Mode: Usando conversación de ejemplo (activa API real con el botón ⚡)');
+        setReportData(getFallbackData());
+        setView('report');
+        setThinking(false);
+      }, 1500);
+      return;
+    }
+
+    // Usar API real (preview con toggle ON o producción)
+    console.log(`🌐 Usando API REAL en ${environment}`);
+
     try {
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -79,29 +142,21 @@ function App() {
       });
 
       if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('Backend no disponible en desarrollo local');
-        }
-
-        try {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Error al generar el análisis');
-        } catch (jsonError) {
-          throw new Error('Error de comunicación con el backend');
-        }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Error ${response.status}: ${response.statusText}`);
       }
 
       const parsedData = await response.json();
       setReportData(parsedData);
       setView('report');
+      setError(null);
 
     } catch (error) {
-      console.error('Error al generar reporte:', error);
+      console.error('❌ Error al generar reporte:', error);
 
-      const isDevelopment = window.location.hostname === 'localhost';
-      const errorMessage = isDevelopment
-        ? 'Desarrollo local: usando conversación de ejemplo'
-        : `${error.message} - Usando conversación alternativa`;
+      const errorMessage = isProduction
+        ? 'Error al conectar con el servidor. Usando conversación de ejemplo.'
+        : `Error: ${error.message}. Usando conversación de ejemplo.`;
 
       setError(errorMessage);
       setReportData(getFallbackData());
@@ -244,13 +299,41 @@ function App() {
           // VISTA DE GESTIÓN DE MEDICAMENTOS
           <div className="p-4 sm:p-6 space-y-6">
             {/* Header */}
-            <div className="text-center py-8 space-y-2">
+            <div className="text-center py-8 space-y-2 relative">
               <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
                 Mental Health Check-In
               </h1>
               <div className="text-gray-400 text-sm">
                 Una conversación honesta sobre tu medicación
               </div>
+
+              {/* Debug Toggle - Solo visible en preview */}
+              {isPreview && (
+                <div className="absolute top-2 right-2">
+                  <button
+                    onClick={toggleAPIMode}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                      useRealAPI
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/50 hover:bg-green-500/30'
+                        : 'bg-gray-700/50 text-gray-400 border border-gray-600 hover:bg-gray-700'
+                    }`}
+                    title={useRealAPI ? 'API Real activada - Click para desactivar' : 'Mock Data - Click para activar API real'}
+                  >
+                    {useRealAPI ? <Zap size={14} /> : <ZapOff size={14} />}
+                    <span>{useRealAPI ? 'API Real' : 'Mock'}</span>
+                  </button>
+                  <div className="text-xs text-gray-500 mt-1 text-right">
+                    Preview Mode
+                  </div>
+                </div>
+              )}
+
+              {/* Indicador de ambiente (solo para debugging) */}
+              {!isProduction && (
+                <div className="text-xs text-gray-500 mt-2">
+                  🔧 Ambiente: {environment} {isLocal && '(siempre mock)'}
+                </div>
+              )}
             </div>
 
             {/* Agregar medicamento */}
