@@ -308,19 +308,13 @@ No hagas una plantilla genérica. Haz una historia única.
 
 Tu respuesta COMPLETA debe ser SOLO JSON válido. Nada más.
 
-NO hagas esto:
-```json
-{...}
-```
+NO agregues:
+- Backticks antes o después
+- Texto explicativo
+- Comentarios
+- Nada extra
 
-Aquí está la conversación:
-{...}
-
-SÍ haz esto:
-{
-  "participants": [...],
-  "messages": [...]
-}
+Tu respuesta debe empezar directamente con { y terminar con }
 
 REGLAS CRÍTICAS:
 1. Empieza con { y termina con }
