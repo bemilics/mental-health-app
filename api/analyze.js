@@ -156,7 +156,7 @@ PERSONALIDADES (Gen Z, casual, wholesome):
 
 - ESTABILIZADOR DE ÁNIMO: El balance. Previene que las emociones se vayan a extremos. Medio filosófico a veces pero no pesado.
 
-- MEDICAMENTOS: Como roommates que saben de química. Explican qué hacen de forma super simple. Ni doctores ni profesores, solo compas que te cuentan su trabajo. Usan analogías cotidianas. A veces se quejan de que nadie entiende lo que hacen.
+- MEDICAMENTOS: Como roommates que saben de química. Explican ESPECÍFICAMENTE qué hacen usando términos correctos pero de forma casual. Mencionan receptores, neurotransmisores, sistemas específicos. No son doctores formales pero SÍ son precisos. Ejemplo: "Estoy bloqueando los receptores de serotonina para que no se recapte tan rápido" en vez de solo "ayudo con el ánimo".
 
 TONO Y LENGUAJE (CRÍTICO):
 
@@ -209,23 +209,27 @@ Sin estructura rígida, solo vida pasando
 Momentos random, conversaciones superpuestas
 Como grupo de amigos verdadero
 
-TEMAS DE CONVERSACIÓN (Gen Z real):
+BALANCE DE TEMAS (IMPORTANTE):
 
-Además de la medicación, pueden tocar temas cotidianos como:
-- Situationships y crushes ("¿le respondo o espero?")
-- Exes y post-breakup feelings
-- Social media anxiety (vio mis historias pero no respondió)
-- Procrastinación y deadlines
-- Existential dread a las 3am
-- Guilty pleasures random
-- Drama con amigos o familia
-- Quedarse hasta tarde scrolling
-- Compararse con otros en redes sociales
-- El cringe de mensajes viejos
-- "¿Debería mandar ese mensaje o es mala idea?"
+El foco PRINCIPAL debe ser cómo funcionan los medicamentos y su efecto en la mente/cuerpo.
+Los temas cotidianos son secundarios y sirven de CONTEXTO, no de protagonista.
 
-Estos temas surgen NATURALMENTE mezclados con cómo se sienten por la medicación.
-Ejemplo: TÚ menciona que le quiere escribir a alguien → SISTEMA DE ALARMA entra en pánico → REGULACIÓN EMOCIONAL lo calma → Medicamento comenta sobre impulsividad vs reflexión.
+Proporción recomendada:
+- 60-70%: Cómo funcionan los medicamentos, interacciones entre aspectos mentales, explicaciones de mecanismos
+- 30-40%: Situaciones cotidianas (trabajo/escuela, relaciones, familia, estrés diario)
+
+Temas cotidianos que PUEDEN aparecer (pero sin protagonismo excesivo):
+- Estrés laboral/académico
+- Insomnio o problemas de sueño
+- Fatiga y energía
+- Ansiedad social general (no solo dating)
+- Concentración y productividad
+- Irritabilidad o cambios de humor
+- Apetito y alimentación
+- Motivación y apatía
+- Relaciones (familia, amigos, pareja) pero sin drama excesivo
+
+El énfasis debe estar en: "¿Cómo está trabajando tu medicación HOY en estas situaciones?"
 
 VARÍA:
 - El orden de quién habla
@@ -235,41 +239,55 @@ VARÍA:
 - Los logros/desafíos del día
 - Las interacciones entre medicamentos y aspectos mentales
 
-EJEMPLOS DE CÓMO DEBEN SONAR LOS MEDICAMENTOS:
+CÓMO DEBEN EXPLICARSE LOS MEDICAMENTOS:
 
-❌ MAL: "Soy Sertralina, un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores"
+Deben mencionar ESPECÍFICAMENTE:
+- Qué neurotransmisor afectan (serotonina, dopamina, noradrenalina, GABA)
+- Qué receptores o sistemas tocan
+- Cuánto tiempo necesitan para hacer efecto
+- Qué síntomas específicos están tratando
+- Posibles efectos secundarios si son relevantes
 
-✅ BIEN: "Yo solo me aseguro de que la serotonina no se vaya toda a la basura. Lo de la memoria es tu pedo"
+Pero en tono CASUAL y relatable:
 
-❌ MAL: "El GABA es un neurotransmisor inhibitorio que..."
+❌ MAL (muy formal): "Soy Sertralina, un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de SERT"
 
-✅ BIEN: "Yo solo bajo el volumen del sistema nervioso. El resto es todo ustedes"
+❌ MAL (muy simple): "Yo solo ayudo con el ánimo"
 
-INTEGRAR TEMAS GEN Z:
+✅ BIEN (específico pero casual): "Yo bloqueo la recaptación de serotonina en las sinapsis. Básicamente hago que la serotonina que ya tienes dure más tiempo haciendo su trabajo. Por eso tardo 2-3 semanas en hacer efecto completo"
 
-La conversación NO debe ser solo sobre medicación. Debe incluir vida cotidiana Gen Z.
+✅ BIEN: "Trabajo con los receptores GABA-A para bajar la excitabilidad neuronal. Es como ponerle un filtro al sistema de alarma. Pero ojo, no me tomes con alcohol porque ambos trabajamos el mismo sistema"
 
-Ejemplos de integración natural:
-- TÚ comparte que alguien le respondió → todos reaccionan → medicamento ayuda a pensar más claro
-- Discuten si mandar un mensaje → Sistema de Alarma se preocupa → Regulación Emocional ayuda a decidir
-- TÚ está scrolling redes sociales a las 3am → Ciclo de Sueño se queja → medicamento para dormir entra
-- Procrastinando algo importante → Función Ejecutiva trata de organizarse → todos ayudan con humor
+✅ BIEN: "Yo aumento dopamina y noradrenalina en la corteza prefrontal. Por eso te ayudo a concentrarte y estar menos impulsivo. Pero si te pasas con la dosis vas a sentirte ansioso porque mucha noradrenalina = sistema de alarma activado"
+
+INTEGRACIÓN CON VIDA COTIDIANA:
+
+Los aspectos mentales y medicamentos reaccionan a situaciones del día. Ejemplos:
+
+Con medicación como protagonista:
+- TÚ: "me siento raro" → MEDICAMENTO: "Estoy ajustando niveles de serotonina, es normal las primeras semanas" → CUERPO: "sí tengo un poco de náusea" → MEDICAMENTO: "Eso pasa, toma con comida"
+
+- SISTEMA DE ALARMA: está activado sin razón → MEDICAMENTO: "Dame 30-45 min más, recién te tomé hace 20 min y necesito llegar al cerebro" → REGULACIÓN: "mientras tanto, respiramos"
+
+- TÚ: no puede dormir → CICLO DE SUEÑO: "llevamos 3 horas despiertos" → MEDICAMENTO: "Estoy modulando los receptores H1 para inducir sueño, pero si tomaste café tarde eso me bloquea"
+
+- FUNCIÓN EJECUTIVA: "no me puedo concentrar" → MEDICAMENTO estimulante: "Estoy aumentando dopamina en la corteza prefrontal pero toma tiempo" → ENFOQUE: "siento que ayuda un poco"
 
 TONO LÚDICO (NO equipo de trabajo):
 
 ✅ Como grupo de amigos:
 - Se interrumpen entre ellos
 - Hacen chistes internos
-- Alguien manda memes o referencias random
-- Se quejan juntos de cosas mundanas (dating, trabajo, escuela, familia)
-- Comparten observaciones absurdas
+- Alguien manda observaciones random
+- Se quejan juntos de cosas mundanas (trabajo, escuela, familia, cansancio)
+- Comparten observaciones absurdas sobre cómo se sienten
 - Se apoyan pero con humor, no con discursos motivacionales
 - Tienen conversaciones paralelas
 - Alguien llega tarde y pregunta "qué me perdí"
 - Se ríen de sus propias dificultades
-- Analizan overthinking de situaciones sociales
-- Debate sobre si mandar ese mensaje o no
-- "Red flags" y "green flags" de situationships
+- Analizan por qué reaccionaron de X forma a Y situación
+- Debaten si lo que sienten es efecto de la medicación o es "real"
+- Reconocen mejoras pero también días difíciles
 
 ❌ NO como equipo de trabajo:
 - No reportar estado como si fuera standup meeting
