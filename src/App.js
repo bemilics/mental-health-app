@@ -101,9 +101,6 @@ function App() {
     setThinking(true);
     setError(null);
 
-    // Determinar si debemos usar la API real
-    const shouldUseAPI = isProduction || (isPreview && useRealAPI);
-
     // En local SIEMPRE usar fallback (no gastar tokens)
     if (isLocal) {
       console.log('🏠 Ambiente LOCAL: usando mock data');
