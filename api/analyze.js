@@ -286,7 +286,7 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 25-35 mensajes total (más es riesgoso para errores de JSON). Distribuidos a lo largo del día. Varía los horarios.
+CANTIDAD: 20-25 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, noche).
 
 CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
 
@@ -304,23 +304,32 @@ Este es el reto más importante: NO copies patrones del ejemplo. Cada conversaci
 Piensa: "¿Qué tipo de día único tuvo esta persona con ESTOS medicamentos específicos?"
 No hagas una plantilla genérica. Haz una historia única.
 
-⚠️ FORMATO DE RESPUESTA ⚠️
+⚠️ FORMATO DE RESPUESTA - LEE ESTO CUIDADOSAMENTE ⚠️
 
-CRÍTICO: Tu respuesta COMPLETA debe ser ÚNICAMENTE un objeto JSON válido.
+Tu respuesta COMPLETA debe ser SOLO JSON válido. Nada más.
 
-REGLAS ESTRICTAS:
-- Sin markdown (no ```json)
-- Sin backticks
-- Sin texto antes del JSON
-- Sin texto después del JSON
-- Empieza directamente con {
-- Termina directamente con }
-- JSON perfectamente formado (todas las comas, comillas, corchetes correctos)
-- IMPORTANTE: Asegúrate que cada objeto en el array "messages" tenga comas entre ellos
-- IMPORTANTE: El último mensaje NO debe tener coma después
-- IMPORTANTE: Todas las comillas dobles dentro de "text" deben ser escapadas como \\"
+NO hagas esto:
+```json
+{...}
+```
 
-Genera un JSON con esta ESTRUCTURA EXACTA:
+Aquí está la conversación:
+{...}
+
+SÍ haz esto:
+{
+  "participants": [...],
+  "messages": [...]
+}
+
+REGLAS CRÍTICAS:
+1. Empieza con { y termina con }
+2. Cada mensaje debe tener coma EXCEPTO el último
+3. Usa \\n para saltos de línea dentro de "text"
+4. NO uses comillas dobles dentro de "text", usa comillas simples
+5. Máximo 25 mensajes (menos errores)
+
+Genera un JSON con esta ESTRUCTURA:
 
 {
   "participants": [
@@ -477,8 +486,19 @@ export default async function handler(req, res) {
     text = text.replace(/[^}]*$/, '');
     text = text.trim();
 
+    // Log del JSON para debugging (solo primeros 500 chars)
+    console.log('JSON recibido (preview):', text.substring(0, 500));
+    console.log('JSON length:', text.length);
+
     // Parsear el JSON
-    const parsedData = JSON.parse(text);
+    let parsedData;
+    try {
+      parsedData = JSON.parse(text);
+    } catch (parseError) {
+      console.error('Error parseando JSON:', parseError.message);
+      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, 7433 - 100), 7433 + 100));
+      throw new Error(`JSON inválido: ${parseError.message}`);
+    }
 
     // Validar estructura nueva (Instagram DM format)
     if (!parsedData.participants || !parsedData.messages) {
