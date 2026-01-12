@@ -156,7 +156,7 @@ PERSONALIDADES (Gen Z, casual, wholesome):
 
 - ESTABILIZADOR DE ÁNIMO: El balance. Previene que las emociones se vayan a extremos. Medio filosófico a veces pero no pesado.
 
-- MEDICAMENTOS: Como roommates que saben de química. Explican ESPECÍFICAMENTE qué hacen usando términos correctos pero de forma casual. Mencionan receptores, neurotransmisores, sistemas específicos. No son doctores formales pero SÍ son precisos. Ejemplo: "Estoy bloqueando los receptores de serotonina para que no se recapte tan rápido" en vez de solo "ayudo con el ánimo".
+- MEDICAMENTOS: Como un amigo que estudió medicina. Saben de qué hablan pero lo explican como si le contaran a un compa. Mencionan los químicos del cerebro (serotonina, dopamina, GABA) pero sin ponerse muy técnicos. Usan analogías cotidianas. Ejemplo: "Hago que la serotonina dure más, como reciclar en vez de tirar a la basura" en vez de "inhibición selectiva de recaptación".
 
 TONO Y LENGUAJE (CRÍTICO):
 
@@ -209,27 +209,37 @@ Sin estructura rígida, solo vida pasando
 Momentos random, conversaciones superpuestas
 Como grupo de amigos verdadero
 
-BALANCE DE TEMAS (IMPORTANTE):
+BALANCE DE TEMAS (CRÍTICO):
 
-El foco PRINCIPAL debe ser cómo funcionan los medicamentos y su efecto en la mente/cuerpo.
-Los temas cotidianos son secundarios y sirven de CONTEXTO, no de protagonista.
+La conversación debe balancear estos tres pilares:
 
-Proporción recomendada:
-- 60-70%: Cómo funcionan los medicamentos, interacciones entre aspectos mentales, explicaciones de mecanismos
-- 30-40%: Situaciones cotidianas (trabajo/escuela, relaciones, familia, estrés diario)
+📱 SOCIAL MEDIA & ROMANTIC ANXIETY (~40%):
+- Situationships y crushes ("¿le respondo?" "vio mi historia pero no contestó")
+- Overthinking mensajes y interacciones
+- Compararse con otros en redes sociales
+- Ansiedad sobre qué publicar o no
+- Exes y post-breakup feelings
+- "¿Qué significa que respondió eso?"
+- Scrolling a las 3am
+- FOMO (fear of missing out)
 
-Temas cotidianos que PUEDEN aparecer (pero sin protagonismo excesivo):
+🌍 VIDA COTIDIANA (~30%):
 - Estrés laboral/académico
-- Insomnio o problemas de sueño
-- Fatiga y energía
-- Ansiedad social general (no solo dating)
+- Problemas de sueño
 - Concentración y productividad
-- Irritabilidad o cambios de humor
-- Apetito y alimentación
-- Motivación y apatía
-- Relaciones (familia, amigos, pareja) pero sin drama excesivo
+- Relaciones con familia/amigos
+- Fatiga y motivación
+- Irritabilidad
+- Actividades diarias normales
 
-El énfasis debe estar en: "¿Cómo está trabajando tu medicación HOY en estas situaciones?"
+💊 MEDICACIÓN Y MECANISMOS (~30%):
+- Cómo funcionan los medicamentos (de forma amigable)
+- Efectos que están sintiendo
+- Tiempos de efecto
+- Interacciones entre aspectos mentales
+- Efectos secundarios relevantes
+
+IMPORTANTE: Estos temas se ENTRELAZAN. Ejemplo: Social anxiety sobre un mensaje → Sistema de Alarma se activa → Medicamento explica por qué está ayudando a regular esa ansiedad → TÚ procesa mejor la situación.
 
 VARÍA:
 - El orden de quién habla
@@ -241,37 +251,46 @@ VARÍA:
 
 CÓMO DEBEN EXPLICARSE LOS MEDICAMENTOS:
 
-Deben mencionar ESPECÍFICAMENTE:
-- Qué neurotransmisor afectan (serotonina, dopamina, noradrenalina, GABA)
-- Qué receptores o sistemas tocan
-- Cuánto tiempo necesitan para hacer efecto
-- Qué síntomas específicos están tratando
-- Posibles efectos secundarios si son relevantes
+Tono: Como un amigo que estudió medicina. Sabe de qué habla pero lo explica simple.
 
-Pero en tono CASUAL y relatable:
+Menciona:
+- Qué químicos del cerebro afectan (serotonina, dopamina, etc.) pero SIN muchos términos técnicos
+- Por qué tardan en hacer efecto
+- Qué están tratando específicamente
+- Efectos secundarios comunes de forma casual
 
-❌ MAL (muy formal): "Soy Sertralina, un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de SERT"
+Ejemplos:
 
-❌ MAL (muy simple): "Yo solo ayudo con el ánimo"
+❌ MAL (muy técnico): "Soy un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de los transportadores SERT en las sinapsis"
 
-✅ BIEN (específico pero casual): "Yo bloqueo la recaptación de serotonina en las sinapsis. Básicamente hago que la serotonina que ya tienes dure más tiempo haciendo su trabajo. Por eso tardo 2-3 semanas en hacer efecto completo"
+❌ MAL (muy vago): "Yo solo te ayudo a sentirte mejor"
 
-✅ BIEN: "Trabajo con los receptores GABA-A para bajar la excitabilidad neuronal. Es como ponerle un filtro al sistema de alarma. Pero ojo, no me tomes con alcohol porque ambos trabajamos el mismo sistema"
+✅ BIEN: "Básicamente hago que la serotonina que ya tienes en el cerebro dure más tiempo haciendo su trabajo. Es como reciclar en vez de tirar a la basura. Por eso tardo 2-3 semanas, necesito que se acumule el efecto"
 
-✅ BIEN: "Yo aumento dopamina y noradrenalina en la corteza prefrontal. Por eso te ayudo a concentrarte y estar menos impulsivo. Pero si te pasas con la dosis vas a sentirte ansioso porque mucha noradrenalina = sistema de alarma activado"
+✅ BIEN: "Trabajo con el GABA, que es como el freno del cerebro. Le bajo el volumen a tu sistema de alarma. Pero no me mezcles con alcohol porque los dos hacemos lo mismo y te puedes sentir muy mareado"
 
-INTEGRACIÓN CON VIDA COTIDIANA:
+✅ BIEN: "Yo subo la dopamina y otro químico que se llama noradrenalina. Por eso te ayudo a concentrarte. Pero si tomas mucho, la noradrenalina te puede poner ansioso porque activa el sistema de alarma"
 
-Los aspectos mentales y medicamentos reaccionan a situaciones del día. Ejemplos:
+✅ BIEN: "Trabajo en los receptores de histamina, por eso te da sueño. Es el mismo mecanismo que los antigripales que te dejan zombie"
 
-Con medicación como protagonista:
-- TÚ: "me siento raro" → MEDICAMENTO: "Estoy ajustando niveles de serotonina, es normal las primeras semanas" → CUERPO: "sí tengo un poco de náusea" → MEDICAMENTO: "Eso pasa, toma con comida"
+EJEMPLOS DE INTEGRACIÓN:
 
-- SISTEMA DE ALARMA: está activado sin razón → MEDICAMENTO: "Dame 30-45 min más, recién te tomé hace 20 min y necesito llegar al cerebro" → REGULACIÓN: "mientras tanto, respiramos"
+Social media & romantic anxiety (40%):
+- TÚ: "me respondió con 'jaja'" → SISTEMA DE ALARMA: "QUÉ SIGNIFICA ESO" → REGULACIÓN: "puede ser literal risa" → MEDICAMENTO: "dame unos minutos más para que puedas pensar claro, estoy trabajando en la serotonina"
 
-- TÚ: no puede dormir → CICLO DE SUEÑO: "llevamos 3 horas despiertos" → MEDICAMENTO: "Estoy modulando los receptores H1 para inducir sueño, pero si tomaste café tarde eso me bloquea"
+- TÚ: "vio mi historia pero no me respondió el mensaje" → SISTEMA DE ALARMA: entra en pánico → FILTRO DE REALIDAD: "o está ocupado?" → MEDICAMENTO ansiolítico: "estoy bajándole al sistema de alarma, espera 20 min"
 
-- FUNCIÓN EJECUTIVA: "no me puedo concentrar" → MEDICAMENTO estimulante: "Estoy aumentando dopamina en la corteza prefrontal pero toma tiempo" → ENFOQUE: "siento que ayuda un poco"
+- TÚ está scrolling a las 3am → CICLO DE SUEÑO: "por favor deja el celular" → TÚ: "es que vi que publicó con alguien" → REGULACIÓN: "eso no ayuda" → MEDICAMENTO para dormir: "el GABA no puede competir con la luz azul, necesito que cierres el teléfono"
+
+Vida cotidiana (30%):
+- FUNCIÓN EJECUTIVA: "tenemos deadline mañana" → TÚ: "lo sé pero no me puedo concentrar" → MEDICAMENTO estimulante: "estoy trabajando en la dopamina pero necesito que comas algo, funciono mejor con glucosa"
+
+- TÚ: "me siento mal sin razón" → REGULACIÓN: "no necesitas razón" → MEDICAMENTO: "la serotonina tarda en estabilizarse, es normal tener días medios"
+
+Mecanismos (30%):
+- MEDICAMENTO explica por qué tarda semanas en funcionar
+- Interacciones entre aspectos mentales (ALARMA vs REGULACIÓN)
+- Efectos secundarios que están sintiendo hoy
 
 TONO LÚDICO (NO equipo de trabajo):
 
@@ -279,15 +298,17 @@ TONO LÚDICO (NO equipo de trabajo):
 - Se interrumpen entre ellos
 - Hacen chistes internos
 - Alguien manda observaciones random
-- Se quejan juntos de cosas mundanas (trabajo, escuela, familia, cansancio)
-- Comparten observaciones absurdas sobre cómo se sienten
+- Se quejan juntos de cosas mundanas (trabajo, escuela, familia, dating)
+- Analizan overthinking: "¿qué significa que respondió así?"
+- Comparten ansiedades sobre social media
 - Se apoyan pero con humor, no con discursos motivacionales
 - Tienen conversaciones paralelas
 - Alguien llega tarde y pregunta "qué me perdí"
 - Se ríen de sus propias dificultades
-- Analizan por qué reaccionaron de X forma a Y situación
-- Debaten si lo que sienten es efecto de la medicación o es "real"
+- Debaten si mandar ese mensaje o no
+- Discuten si lo que sienten es efecto de la medicación o es "real"
 - Reconocen mejoras pero también días difíciles
+- Hablan de crushes, exes, situationships con normalidad
 
 ❌ NO como equipo de trabajo:
 - No reportar estado como si fuera standup meeting
@@ -304,7 +325,7 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 20-25 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, noche).
+CANTIDAD: 35-50 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, tarde, noche). Dale espacio a la conversación para desarrollarse naturalmente.
 
 CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
 
