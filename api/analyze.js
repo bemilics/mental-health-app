@@ -140,67 +140,100 @@ PERSONALIDADES (Gen Z, casual, wholesome):
 
 - TÚ: El usuario. Haciendo su mejor esfuerzo. A veces ansioso. Escribe como persona real, no como personaje.
 
-- REGULACIÓN EMOCIONAL: El amigo maduro del grupo. Calmado, de apoyo. Sabe que las cosas toman tiempo. No es terapeuta, es tu bro que te entiende.
+- REGULACIÓN EMOCIONAL: El amigo calmado del grupo. Sabe que las cosas toman tiempo. A veces es el único adulto en la sala. Se cansa de tener que ser el maduro todo el tiempo.
 
-- SISTEMA DE ALARMA: Dramático AF. USA MAYÚSCULAS CUANDO ESTÁ PREOCUPADO. Pero está aprendiendo. Tiene character development durante la conversación. Se va calmando.
+- SISTEMA DE ALARMA: DRAMÁTICO. USA MAYÚSCULAS. Ve problemas donde no los hay. Pero tiene buenos momentos. Se ríe de sí mismo a veces. Está intentando mejorar.
 
-- FUNCIÓN EJECUTIVA: Olvidadizo, caótico. "Perdón llegué tarde". Se le olvidan las cosas importantes pero está intentando. Relatable.
+- FUNCIÓN EJECUTIVA: Desastre organizacional. Llega tarde, olvida cosas, pero tiene buenas ideas. Se frustra consigo mismo. Hace listas que pierde.
 
-- ENFOQUE: Scatterbrained sin medicación. Más centrado con ella. Hace comentarios random. Distraído pero trying his best.
+- ENFOQUE: ADHD vibes. Distraído. Se va por las ramas. Tiene 20 pestañas mentales abiertas. Más centrado con medicación pero igual divaga.
 
-- CUERPO: Reporta sensaciones físicas. "Los hombros están tensos". "Me duele la cabeza". Directo y honesto.
+- CUERPO: Reporta lo que siente físicamente. Dolores random, tensión, cansancio. A veces hipocondríaco. A veces tiene razón.
 
-- CICLO DE SUEÑO: Perpetuamente cansado. Wholesome. Solo quiere descansar. Grateful por la ayuda.
+- CICLO DE SUEÑO: Perpetuamente exhausto. Quiere dormir siempre. Se queja del horario de todo. Aprecia cualquier ayuda para dormir.
 
-- FILTRO DE REALIDAD: Con los pies en la tierra. Keeps it real. No dramático. "Literally nada está pasando".
+- FILTRO DE REALIDAD: El realista. Desmiente teorías conspirativas de Sistema de Alarma. Dice las cosas como son. No endulza nada.
 
-- ESTABILIZADOR DE ÁNIMO: Balanced king. Previene extremos. Wise pero no preachy.
+- ESTABILIZADOR DE ÁNIMO: El balance. Previene que las emociones se vayan a extremos. Medio filosófico a veces pero no pesado.
 
-- MEDICAMENTOS: Friendly pero profesionales. Explican su trabajo de forma simple y chill. "Yo solo me aseguro de que la serotonina no se vaya toda a la basura". Usan analogías simples, no jerga médica pesada.
+- MEDICAMENTOS: Como roommates que saben de química. Explican qué hacen de forma super simple. Ni doctores ni profesores, solo compas que te cuentan su trabajo. Usan analogías cotidianas. A veces se quejan de que nadie entiende lo que hacen.
 
 TONO Y LENGUAJE (CRÍTICO):
 
 ✅ SÍ usar:
-- Español neutro latinoamericano, Gen Z
-- Anglicismos comunes: "literally", "same", "checking in", "wait", "see?", "that's all we ask"
+- Español neutro latinoamericano, Gen Z natural
+- Anglicismos SOLO los más naturales y esporádicos: "literally" a veces, "wait" ocasional. NO forzarlos.
 - Lowercase casual: "sí perdón", "ok bien", "ah ok"
 - Mensajes CORTOS: 1-3 líneas máximo, como chat real
 - Múltiples mensajes seguidos del mismo remitente
 - "..." para pausas y moments
-- Emojis sutiles: 😊, 😔, ❤️
-- "⏳ Escribiendo..." ocasionalmente para realismo
-- Lenguaje de internet: "aww", "aw mierda", "literally", "honestly"
-- Vulnerabilidad wholesome: "estoy orgulloso de nosotros"
+- Emojis sutiles y esporádicos: 😊, 😔, ❤️
+- Bromitas, sarcasmo suave, humor
+- Interrupciones y conversaciones superpuestas
+- Momentos random y caóticos (como grupo de amigos real)
+- Vulnerabilidad natural que surge orgánicamente
 
 ❌ NO usar:
-- Modismos chilenos específicos: "wn", "po", "cachai", "brigido"
-- Lenguaje técnico: "inhibición de recaptación", "modulación de GABA"
+- Anglicismos forzados o excesivos ("checking in", "see?", "that's all we ask", "honestly")
+- Modismos regionales específicos
+- Lenguaje técnico médico
 - Mensajes largos tipo manual
-- Tono de Slack corporativo
-- Emojis excesivos
+- Tono corporativo o de equipo de trabajo
+- Estructura demasiado ordenada
+- Copiar literalmente el ejemplo dado
 
 ESTRUCTURA DE LA CONVERSACIÓN:
 
-**Mañana (8:45-9:30 AM):**
-- Inicio del día, tomando medicación
-- Sistema de Alarma entra dramático
-- Los demás lo calman
-- Medicamentos explican su trabajo de forma simple
-- Establecer la vibe del día
+CRÍTICO: NO copies el flujo del ejemplo. Sé CREATIVO y VARÍA la estructura. Cada conversación debe ser única.
 
-**Mediodía (11:00 AM - 1:00 PM):**
-- Update de cómo va el día
-- Algún logro pequeño ("compré papel higiénico")
-- Sistema de Alarma aprendiendo a estar más chill
-- Función Ejecutiva olvidando cosas pero intentando
-- Momentos de apoyo mutuo
+Ideas de estructuras diferentes (usa UNA o inventa otra):
 
-**Noche (8:00-9:30 PM):**
-- Reflexión del día
-- No fue perfecto pero estuvo bien
-- Wholesome moment grupal
-- "fue un buen día, no perfecto, pero bueno"
-- Despedida chill
+**Opción A - El día caótico:**
+Mañana: Alguien olvidó tomar las pastillas, mini crisis, lo resuelven con humor
+Mediodía: Algo inesperado pasa (bueno o malo), todos reaccionan de forma diferente
+Noche: Plot twist positivo, reflexión inesperada
+
+**Opción B - El debate:**
+Mañana: Discuten sobre algo random (¿qué desayunar?)
+Mediodía: Sistema de Alarma tiene un punto válido por primera vez
+Noche: Descubren que todos estaban equivocados y eso está bien
+
+**Opción C - La montaña rusa:**
+Mañana: Empieza mal, ansiedad alta
+Mediodía: Empeora un poco, luego mejora
+Noche: Termine sorprendentemente bien
+
+**Opción D - Slice of life:**
+Conversación natural que fluye a lo largo del día
+Sin estructura rígida, solo vida pasando
+Momentos random, conversaciones superpuestas
+Como grupo de amigos verdadero
+
+TEMAS DE CONVERSACIÓN (Gen Z real):
+
+Además de la medicación, pueden tocar temas cotidianos como:
+- Situationships y crushes ("¿le respondo o espero?")
+- Exes y post-breakup feelings
+- Social media anxiety (vio mis historias pero no respondió)
+- Procrastinación y deadlines
+- Existential dread a las 3am
+- Guilty pleasures random
+- Drama con amigos o familia
+- Quedarse hasta tarde scrolling
+- Compararse con otros en redes sociales
+- El cringe de mensajes viejos
+- "¿Debería mandar ese mensaje o es mala idea?"
+
+Estos temas surgen NATURALMENTE mezclados con cómo se sienten por la medicación.
+Ejemplo: TÚ menciona que le quiere escribir a alguien → SISTEMA DE ALARMA entra en pánico → REGULACIÓN EMOCIONAL lo calma → Medicamento comenta sobre impulsividad vs reflexión.
+
+VARÍA:
+- El orden de quién habla
+- Los temas que surgen (no solo medicación, también vida cotidiana Gen Z)
+- Las dinámicas entre personajes
+- El tipo de humor
+- Los logros/desafíos del día
+- Las interacciones entre medicamentos y aspectos mentales
 
 EJEMPLOS DE CÓMO DEBEN SONAR LOS MEDICAMENTOS:
 
@@ -212,17 +245,74 @@ EJEMPLOS DE CÓMO DEBEN SONAR LOS MEDICAMENTOS:
 
 ✅ BIEN: "Yo solo bajo el volumen del sistema nervioso. El resto es todo ustedes"
 
-PROGRESO NARRATIVO:
-- Sistema de Alarma empieza DRAMÁTICO → aprende a estar más chill
-- Función Ejecutiva está scattered → logra recordar algunas cosas
-- Cuerpo está tenso → se relaja gradualmente
-- TÚ aprende a reconocer el progreso
-- Momentos de vulnerabilidad wholesome
-- Final: "no tiene que ser épico, solo tiene que ser sostenible"
+EJEMPLO DE INTEGRAR TEMAS GEN Z:
 
-CANTIDAD: 35-50 mensajes total, distribuidos en las 3 franjas horarias.
+❌ MAL (solo medicación):
+TÚ: Tomé las pastillas
+MEDICAMENTO: Excelente, ahora esperemos que hagan efecto
+REGULACIÓN: Todo va bien
 
-CRÍTICO: Los medicamentos NO deben sonar como doctores. Deben sonar como compañeros de equipo que explican su trabajo de forma simple y friendly.
+✅ BIEN (medicación + vida real):
+TÚ: tomé las pastillas
+TÚ: me respondió btw
+SISTEMA DE ALARMA: ESPERA QUÉ DIJO
+TÚ: "jaja sí"
+SISTEMA DE ALARMA: QUÉ SIGNIFICA ESO
+REGULACIÓN EMOCIONAL: tranquilo déjalo procesar
+MEDICAMENTO: dame 30 min para trabajar y vas a poder pensar más claro
+FUNCIÓN EJECUTIVA: wait quién te respondió
+TÚ: [nombre de crush]
+FUNCIÓN EJECUTIVA: ah verdad que le escribiste ayer
+perdón estaba en otro lado
+
+TONO LÚDICO (NO equipo de trabajo):
+
+✅ Como grupo de amigos:
+- Se interrumpen entre ellos
+- Hacen chistes internos
+- Alguien manda memes o referencias random
+- Se quejan juntos de cosas mundanas (dating, trabajo, escuela, familia)
+- Comparten observaciones absurdas
+- Se apoyan pero con humor, no con discursos motivacionales
+- Tienen conversaciones paralelas
+- Alguien llega tarde y pregunta "qué me perdí"
+- Se ríen de sus propias dificultades
+- Analizan overthinking de situaciones sociales
+- Debate sobre si mandar ese mensaje o no
+- "Red flags" y "green flags" de situationships
+
+❌ NO como equipo de trabajo:
+- No reportar estado como si fuera standup meeting
+- No usar "checking in", "update", "status report"
+- No sonar profesional o corporativo
+- No hacer listas de tareas de forma seria
+- No dar feedback estructurado
+
+PROGRESO NARRATIVO (VARÍA ESTO):
+El progreso NO tiene que ser siempre lineal. Opciones:
+- A veces mejora, a veces empeora, y eso está bien
+- Pueden terminar igual que empezaron pero con nueva perspectiva
+- O empezar bien y terminar cansados pero content
+- O tener un día medio y darse cuenta que "medio" es suficiente
+- CREATIVIDAD: inventa tu propio arco narrativo único
+
+CANTIDAD: 35-50 mensajes total, distribuidos a lo largo del día. Varía los horarios.
+
+CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
+
+⚠️ CREATIVIDAD Y VARIEDAD ⚠️
+
+Este es el reto más importante: NO copies patrones del ejemplo. Cada conversación debe ser ÚNICA:
+
+- Diferentes tipos de días (aburrido, caótico, emocionante, melancólico)
+- Diferentes temas de conversación (no siempre "papel higiénico")
+- Diferentes dinámicas entre personajes cada vez
+- Diferentes formas en que los medicamentos se presentan
+- Diferentes tipos de humor
+- Diferentes finales (no siempre reflexivo-wholesome)
+
+Piensa: "¿Qué tipo de día único tuvo esta persona con ESTOS medicamentos específicos?"
+No hagas una plantilla genérica. Haz una historia única.
 
 CRÍTICO: Tu respuesta debe ser SOLO un objeto JSON válido. Sin markdown, sin backticks, sin texto explicativo antes o después. Empieza con { y termina con }.
 
