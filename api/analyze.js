@@ -127,46 +127,102 @@ function generatePrompt(medications, analysis) {
   const mentalAspectsList = analysis.mentalAspects.join(', ');
   const medicationsList = analysis.medications.map(m => m.name).join(', ');
 
-  return `Genera una conversación de grupo al estilo Instagram DM sobre este régimen de medicamentos psiquiátricos.
+  return `Genera una conversación de chat grupal sobre medicación psiquiátrica. El tono debe ser EXACTAMENTE como un grupo de WhatsApp entre amigos Gen Z, NO como Slack de desarrolladores.
 
 MEDICAMENTOS:
 ${medList}
 
-PARTICIPANTES DE LA CONVERSACIÓN:
+PARTICIPANTES:
 Aspectos mentales: ${mentalAspectsList}
-Medicamentos como personajes: ${medicationsList}
+Medicamentos: ${medicationsList}
 
-PERSONALIDADES DE LOS ASPECTOS MENTALES:
-- TÚ: El usuario, curioso, a veces ansioso, haciendo su mejor esfuerzo
-- REGULACIÓN EMOCIONAL: Amigo maduro y calmado, de apoyo, sabe que las cosas toman tiempo
-- SISTEMA DE ALARMA: Ansioso, dramático, USA MAYÚSCULAS A VECES, está aprendiendo a calmarse
-- FUNCIÓN EJECUTIVA: Olvidadizo, disperso, tratando de organizarse lo mejor posible
-- ENFOQUE: Hiperactivo cuando no está medicado, más concentrado con medicación
-- CUERPO: Reporta sensaciones físicas, directo, honesto sobre cómo se siente
-- CICLO DE SUEÑO: Cansado, quiere descansar, agradecido por la ayuda
-- FILTRO DE REALIDAD: Filosófico, con los pies en la tierra, mantiene las cosas realistas
-- ESTABILIZADOR DE ÁNIMO: Balanceado, sabio, previene extremos emocionales
-- MENTE: Genérico para procesamiento mental
-- MEDICAMENTOS: Profesionales pero amigables, educativos, específicos sobre mecanismos
+PERSONALIDADES (Gen Z, casual, wholesome):
 
-IMPORTANTE: Cada medicamento debe explicar específicamente cómo funciona:
-- SSRIs: Inhibición de recaptación de serotonina
-- Benzodiacepinas: Modulación de GABA
-- Estimulantes: Dopamina y noradrenalina
-- Etc.
+- TÚ: El usuario. Haciendo su mejor esfuerzo. A veces ansioso. Escribe como persona real, no como personaje.
 
-FORMATO DE LA CONVERSACIÓN:
-- Estilo Instagram DM: casual, con emojis, abreviaciones, lowercase a veces
-- Tono: Irónico pero wholesome, honesto pero de apoyo
-- Horarios: Mañana (8-9am), Mediodía (11am-1pm), Noche (8-9pm)
-- 15-25 mensajes en total
-- Mezcla de mensajes cortos (1-2 líneas) y largos (3-5 líneas)
-- Mensajes múltiples seguidos del mismo remitente (estilo Instagram)
-- Algunas reacciones con emoji (❤️, 😂, 👍)
-- Mostrar progreso desde la mañana hasta la noche
-- SER ESPECÍFICO sobre los mecanismos de los medicamentos
-- Normalizar el uso de medicación psiquiátrica
-- Español chileno casual (wn, po, cachai, brigido, etc.)
+- REGULACIÓN EMOCIONAL: El amigo maduro del grupo. Calmado, de apoyo. Sabe que las cosas toman tiempo. No es terapeuta, es tu bro que te entiende.
+
+- SISTEMA DE ALARMA: Dramático AF. USA MAYÚSCULAS CUANDO ESTÁ PREOCUPADO. Pero está aprendiendo. Tiene character development durante la conversación. Se va calmando.
+
+- FUNCIÓN EJECUTIVA: Olvidadizo, caótico. "Perdón llegué tarde". Se le olvidan las cosas importantes pero está intentando. Relatable.
+
+- ENFOQUE: Scatterbrained sin medicación. Más centrado con ella. Hace comentarios random. Distraído pero trying his best.
+
+- CUERPO: Reporta sensaciones físicas. "Los hombros están tensos". "Me duele la cabeza". Directo y honesto.
+
+- CICLO DE SUEÑO: Perpetuamente cansado. Wholesome. Solo quiere descansar. Grateful por la ayuda.
+
+- FILTRO DE REALIDAD: Con los pies en la tierra. Keeps it real. No dramático. "Literally nada está pasando".
+
+- ESTABILIZADOR DE ÁNIMO: Balanced king. Previene extremos. Wise pero no preachy.
+
+- MEDICAMENTOS: Friendly pero profesionales. Explican su trabajo de forma simple y chill. "Yo solo me aseguro de que la serotonina no se vaya toda a la basura". Usan analogías simples, no jerga médica pesada.
+
+TONO Y LENGUAJE (CRÍTICO):
+
+✅ SÍ usar:
+- Español neutro latinoamericano, Gen Z
+- Anglicismos comunes: "literally", "same", "checking in", "wait", "see?", "that's all we ask"
+- Lowercase casual: "sí perdón", "ok bien", "ah ok"
+- Mensajes CORTOS: 1-3 líneas máximo, como chat real
+- Múltiples mensajes seguidos del mismo remitente
+- "..." para pausas y moments
+- Emojis sutiles: 😊, 😔, ❤️
+- "⏳ Escribiendo..." ocasionalmente para realismo
+- Lenguaje de internet: "aww", "aw mierda", "literally", "honestly"
+- Vulnerabilidad wholesome: "estoy orgulloso de nosotros"
+
+❌ NO usar:
+- Modismos chilenos específicos: "wn", "po", "cachai", "brigido"
+- Lenguaje técnico: "inhibición de recaptación", "modulación de GABA"
+- Mensajes largos tipo manual
+- Tono de Slack corporativo
+- Emojis excesivos
+
+ESTRUCTURA DE LA CONVERSACIÓN:
+
+**Mañana (8:45-9:30 AM):**
+- Inicio del día, tomando medicación
+- Sistema de Alarma entra dramático
+- Los demás lo calman
+- Medicamentos explican su trabajo de forma simple
+- Establecer la vibe del día
+
+**Mediodía (11:00 AM - 1:00 PM):**
+- Update de cómo va el día
+- Algún logro pequeño ("compré papel higiénico")
+- Sistema de Alarma aprendiendo a estar más chill
+- Función Ejecutiva olvidando cosas pero intentando
+- Momentos de apoyo mutuo
+
+**Noche (8:00-9:30 PM):**
+- Reflexión del día
+- No fue perfecto pero estuvo bien
+- Wholesome moment grupal
+- "fue un buen día, no perfecto, pero bueno"
+- Despedida chill
+
+EJEMPLOS DE CÓMO DEBEN SONAR LOS MEDICAMENTOS:
+
+❌ MAL: "Soy Sertralina, un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores"
+
+✅ BIEN: "Yo solo me aseguro de que la serotonina no se vaya toda a la basura. Lo de la memoria es tu pedo"
+
+❌ MAL: "El GABA es un neurotransmisor inhibitorio que..."
+
+✅ BIEN: "Yo solo bajo el volumen del sistema nervioso. El resto es todo ustedes"
+
+PROGRESO NARRATIVO:
+- Sistema de Alarma empieza DRAMÁTICO → aprende a estar más chill
+- Función Ejecutiva está scattered → logra recordar algunas cosas
+- Cuerpo está tenso → se relaja gradualmente
+- TÚ aprende a reconocer el progreso
+- Momentos de vulnerabilidad wholesome
+- Final: "no tiene que ser épico, solo tiene que ser sostenible"
+
+CANTIDAD: 35-50 mensajes total, distribuidos en las 3 franjas horarias.
+
+CRÍTICO: Los medicamentos NO deben sonar como doctores. Deben sonar como compañeros de equipo que explican su trabajo de forma simple y friendly.
 
 CRÍTICO: Tu respuesta debe ser SOLO un objeto JSON válido. Sin markdown, sin backticks, sin texto explicativo antes o después. Empieza con { y termina con }.
 
@@ -191,13 +247,32 @@ Genera un JSON con esta ESTRUCTURA EXACTA:
     {
       "time": "8:47 AM",
       "senderId": "tu",
-      "text": "wena cabros",
-      "reactions": ["❤️"]
+      "text": "Buenos días"
     },
     {
       "time": "8:48 AM",
       "senderId": "regulacion",
-      "text": "buenos días\nbueno más o menos jaja\ntomaste las pastillas?"
+      "text": "buenos"
+    },
+    {
+      "time": "8:48 AM",
+      "senderId": "regulacion",
+      "text": "bueno más o menos\ntomaste las pastillas?"
+    },
+    {
+      "time": "8:49 AM",
+      "senderId": "tu",
+      "text": "Sí, recién"
+    },
+    {
+      "time": "8:50 AM",
+      "senderId": "alarma",
+      "text": "CHICOS CREO QUE ALGO MALO VA A PASAR"
+    },
+    {
+      "time": "8:51 AM",
+      "senderId": "regulacion",
+      "text": "literally nada está pasando\nes lunes en la mañana\ntodo está bien"
     }
   ]
 }
