@@ -245,25 +245,15 @@ EJEMPLOS DE CÓMO DEBEN SONAR LOS MEDICAMENTOS:
 
 ✅ BIEN: "Yo solo bajo el volumen del sistema nervioso. El resto es todo ustedes"
 
-EJEMPLO DE INTEGRAR TEMAS GEN Z:
+INTEGRAR TEMAS GEN Z:
 
-❌ MAL (solo medicación):
-TÚ: Tomé las pastillas
-MEDICAMENTO: Excelente, ahora esperemos que hagan efecto
-REGULACIÓN: Todo va bien
+La conversación NO debe ser solo sobre medicación. Debe incluir vida cotidiana Gen Z.
 
-✅ BIEN (medicación + vida real):
-TÚ: tomé las pastillas
-TÚ: me respondió btw
-SISTEMA DE ALARMA: ESPERA QUÉ DIJO
-TÚ: "jaja sí"
-SISTEMA DE ALARMA: QUÉ SIGNIFICA ESO
-REGULACIÓN EMOCIONAL: tranquilo déjalo procesar
-MEDICAMENTO: dame 30 min para trabajar y vas a poder pensar más claro
-FUNCIÓN EJECUTIVA: wait quién te respondió
-TÚ: [nombre de crush]
-FUNCIÓN EJECUTIVA: ah verdad que le escribiste ayer
-perdón estaba en otro lado
+Ejemplos de integración natural:
+- TÚ comparte que alguien le respondió → todos reaccionan → medicamento ayuda a pensar más claro
+- Discuten si mandar un mensaje → Sistema de Alarma se preocupa → Regulación Emocional ayuda a decidir
+- TÚ está scrolling redes sociales a las 3am → Ciclo de Sueño se queja → medicamento para dormir entra
+- Procrastinando algo importante → Función Ejecutiva trata de organizarse → todos ayudan con humor
 
 TONO LÚDICO (NO equipo de trabajo):
 
@@ -296,7 +286,7 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 35-50 mensajes total, distribuidos a lo largo del día. Varía los horarios.
+CANTIDAD: 25-35 mensajes total (más es riesgoso para errores de JSON). Distribuidos a lo largo del día. Varía los horarios.
 
 CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
 
@@ -314,7 +304,21 @@ Este es el reto más importante: NO copies patrones del ejemplo. Cada conversaci
 Piensa: "¿Qué tipo de día único tuvo esta persona con ESTOS medicamentos específicos?"
 No hagas una plantilla genérica. Haz una historia única.
 
-CRÍTICO: Tu respuesta debe ser SOLO un objeto JSON válido. Sin markdown, sin backticks, sin texto explicativo antes o después. Empieza con { y termina con }.
+⚠️ FORMATO DE RESPUESTA ⚠️
+
+CRÍTICO: Tu respuesta COMPLETA debe ser ÚNICAMENTE un objeto JSON válido.
+
+REGLAS ESTRICTAS:
+- Sin markdown (no ```json)
+- Sin backticks
+- Sin texto antes del JSON
+- Sin texto después del JSON
+- Empieza directamente con {
+- Termina directamente con }
+- JSON perfectamente formado (todas las comas, comillas, corchetes correctos)
+- IMPORTANTE: Asegúrate que cada objeto en el array "messages" tenga comas entre ellos
+- IMPORTANTE: El último mensaje NO debe tener coma después
+- IMPORTANTE: Todas las comillas dobles dentro de "text" deben ser escapadas como \\"
 
 Genera un JSON con esta ESTRUCTURA EXACTA:
 
@@ -362,7 +366,7 @@ Genera un JSON con esta ESTRUCTURA EXACTA:
     {
       "time": "8:51 AM",
       "senderId": "regulacion",
-      "text": "literally nada está pasando\nes lunes en la mañana\ntodo está bien"
+      "text": "nada está pasando\nes lunes en la mañana\ntodo bien"
     }
   ]
 }
