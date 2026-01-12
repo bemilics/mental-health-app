@@ -167,20 +167,21 @@ TONO Y LENGUAJE (CRÍTICO):
 - Mensajes CORTOS: 1-3 líneas máximo, como chat real
 - Múltiples mensajes seguidos del mismo remitente
 - "..." para pausas y moments
-- Emojis sutiles y esporádicos: 😊, 😔, ❤️
 - Bromitas, sarcasmo suave, humor
 - Interrupciones y conversaciones superpuestas
 - Momentos random y caóticos (como grupo de amigos real)
 - Vulnerabilidad natural que surge orgánicamente
+- Reactions (campo "reactions" con emojis como array) pero solo ocasionalmente
 
 ❌ NO usar:
 - Anglicismos forzados o excesivos ("checking in", "see?", "that's all we ask", "honestly")
 - Modismos regionales específicos
-- Lenguaje técnico médico
+- Lenguaje técnico médico excesivo
 - Mensajes largos tipo manual
 - Tono corporativo o de equipo de trabajo
 - Estructura demasiado ordenada
 - Copiar literalmente el ejemplo dado
+- ⚠️ EMOJIS DENTRO DEL CAMPO "text" (causa errores de JSON)
 
 ESTRUCTURA DE LA CONVERSACIÓN:
 
@@ -325,7 +326,7 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 35-50 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, tarde, noche). Dale espacio a la conversación para desarrollarse naturalmente.
+CANTIDAD: 30-35 mensajes total (más es riesgoso para el JSON). Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
 
 CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
 
@@ -355,12 +356,16 @@ NO agregues:
 
 Tu respuesta debe empezar directamente con { y terminar con }
 
-REGLAS CRÍTICAS:
-1. Empieza con { y termina con }
-2. Cada mensaje debe tener coma EXCEPTO el último
+REGLAS CRÍTICAS PARA EL JSON:
+1. Empieza directamente con { y termina con }
+2. Cada objeto en "messages" array DEBE tener coma después, EXCEPTO el último
 3. Usa \\n para saltos de línea dentro de "text"
 4. NO uses comillas dobles dentro de "text", usa comillas simples
-5. Máximo 25 mensajes (menos errores)
+5. ⚠️ NO INCLUYAS EMOJIS DENTRO DEL CAMPO "text" DE LOS MENSAJES (los emojis solo van en "emoji" de participants)
+6. Verifica que el último mensaje NO tenga coma trailing
+7. Máximo 35 mensajes
+
+IMPORTANTE: Los emojis SOLO van en el campo "emoji" de participants. En el "text" de los mensajes NO uses emojis, usa texto normal.
 
 Genera un JSON con esta ESTRUCTURA:
 
