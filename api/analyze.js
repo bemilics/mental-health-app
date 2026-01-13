@@ -431,7 +431,11 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
+<<<<<<< Updated upstream
 CANTIDAD: 30-35 mensajes total (más es riesgoso para el JSON). Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
+=======
+CANTIDAD: 35-40 mensajes total (más genera JSONs muy largos que pueden fallar). Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
+>>>>>>> Stashed changes
 
 CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
 
