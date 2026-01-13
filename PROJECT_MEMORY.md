@@ -1,7 +1,7 @@
 # 🧠 MEMORIA DEL PROYECTO - MENTAL HEALTH CHECK-IN
 
 > **Documento de seguimiento sesión a sesión**
-> Última actualización: 2026-01-12
+> Última actualización: 2026-01-13
 
 ---
 
@@ -124,20 +124,27 @@ Según medicamentos detectados:
 ```
 mental-health-app/
 ├── api/
-│   └── analyze.js      # Serverless function (332 líneas) - análisis dinámico
+│   └── analyze.js           # Serverless function (~770 líneas) - análisis dinámico, repairJSON, retry
 ├── public/
 ├── src/
-│   ├── App.js          # Componente principal (499 líneas) - Instagram DM UI
-│   ├── index.css       # Estilos base + Tailwind
-│   └── index.js        # Entry point
+│   ├── App.js               # Componente principal (~590 líneas) - Instagram DM UI + perfil
+│   ├── index.css            # Estilos base + Tailwind
+│   └── index.js             # Entry point
 ├── .gitignore
 ├── package.json
-├── vercel.json         # Configuración de Vercel
-├── tailwind.config.js  # Configuración de Tailwind
-├── postcss.config.js   # Configuración de PostCSS
+├── vercel.json              # Configuración de Vercel
+├── tailwind.config.js       # Configuración de Tailwind
+├── postcss.config.js        # Configuración de PostCSS
 ├── README.md
-└── PROJECT_MEMORY.md   # Este archivo
+├── VERCEL_SETUP.md          # Guía de configuración de ambiente (Sesión 3)
+├── TESTING.md               # Guía de feature flags
+└── PROJECT_MEMORY.md        # Este archivo
 ```
+
+**Archivos Clave:**
+- `api/analyze.js`: Backend con generación dinámica, repairJSON(), fetchWithRetry()
+- `src/App.js`: Frontend con selectores de perfil y detección de ambiente
+- `VERCEL_SETUP.md`: Configuración de variables de entorno para producción/preview
 
 ---
 
@@ -171,9 +178,16 @@ mental-health-app/
 - ✅ Eliminar medicamentos
 - ✅ Persistencia en localStorage
 - ✅ Generación de análisis con Claude API (backend seguro)
-- ✅ **Vista de conversación Instagram DM** (nueva Sesión 2)
-- ✅ **Generación dinámica de personajes según medicamentos** (nueva)
-- ✅ **Análisis automático de tipos de medicamentos** (nueva)
+- ✅ **Vista de conversación Instagram DM** (Sesión 2)
+- ✅ **Generación dinámica de personajes según medicamentos** (Sesión 2)
+- ✅ **Análisis automático de tipos de medicamentos** (Sesión 2)
+- ✅ **Selectores de perfil de usuario** (Sesión 3) - género, orientación, situación sentimental
+- ✅ **Personalización de conversaciones por perfil** (Sesión 3)
+- ✅ **Reparación automática de JSON truncados** (Sesión 3) - repairJSON()
+- ✅ **Retry automático para errores de red** (Sesión 3) - fetchWithRetry()
+- ✅ **Detección mejorada de ambiente** (Sesión 3) - dual-method
+- ✅ **Medicamentos como roommates integrados** (Sesión 3) - menos técnico, más práctico
+- ✅ **Conversaciones de 45-50 mensajes** (Sesión 3) - aumentado desde 30-35
 - ✅ Fallback cuando falla la API con conversación de ejemplo
 - ✅ Estados de carga con animación
 - ✅ Manejo de errores mejorado
@@ -182,18 +196,39 @@ mental-health-app/
 - ✅ Dark theme con gradientes
 
 ### Lógica de Backend (api/analyze.js)
-**Función `analyzeSymptoms()`** (líneas 29-117):
+**Función `analyzeSymptoms()`** (líneas ~29-117):
 - Detecta automáticamente tipo de medicamento (SSRIs, benzodiacepinas, etc.)
 - Genera personajes relevantes según condiciones que tratan
 - Agrega cada medicamento como personaje educativo
 - Fallback a personajes genéricos si no detecta medicamento
 
-**Función `generatePrompt()`** (líneas 122-230):
+**Función `generatePrompt()`** (líneas ~122-590):
 - Crea prompt personalizado con personajes dinámicos
+- Acepta `userProfile` (género, orientación, situación sentimental) - **Nuevo Sesión 3**
+- Personaliza conversaciones según perfil del usuario - **Nuevo Sesión 3**
 - Solicita español chileno casual
-- Especifica formato Instagram DM con 15-25 mensajes
-- Incluye horarios (mañana, mediodía, noche)
-- Pide explicaciones específicas de mecanismos farmacológicos
+- Especifica formato Instagram DM con 45-50 mensajes - **Actualizado Sesión 3**
+- Incluye horarios (mañana, mediodía, tarde, noche)
+- Define medicamentos como "roommates" no "profesores" - **Actualizado Sesión 3**
+- 50+ ejemplos de interacciones situacionales - **Nuevo Sesión 3**
+- 10 reglas críticas para JSON válido - **Reforzado Sesión 3**
+
+**Función `repairJSON()`** (líneas ~682-751) - **Nueva Sesión 3**:
+- Detecta JSONs truncados (count de llaves/corchetes)
+- Remueve trailing commas
+- Identifica y remueve contenido incompleto
+- Cierra strings, arrays y objetos abiertos
+- Logging detallado con emojis
+
+**Función `fetchWithRetry()`** (líneas ~626-651) - **Nueva Sesión 3**:
+- Retry automático para errores de red (2 intentos)
+- Espera 2 segundos entre reintentos
+- Solo reintenta errores de socket/fetch failed
+- Logging de cada intento
+
+**Configuración de API:**
+- max_tokens: 4500 (aumentado desde 3000 en Sesión 3)
+- Model: claude-sonnet-4-20250514
 
 ---
 
@@ -574,26 +609,336 @@ El prompt solicita específicamente español chileno casual:
 
 ---
 
+### Sesión 3 - 2026-01-13
+**Duración:** ~3 horas
+**Estado Final:** ✅ Completada exitosamente - Cambios en producción
+
+#### Contexto Inicial:
+Esta sesión empezó como continuación de una sesión anterior que llegó al límite de contexto. Se encontraron reverts incompletos y merge conflicts que necesitaban limpieza.
+
+#### Objetivos Iniciales:
+1. Resolver merge conflicts y volver a estado estable
+2. Arreglar detección de ambiente (toggle visible en producción)
+3. Mejorar interacción de medicamentos en chat (menos técnico, más integrado)
+4. Aumentar cantidad de mensajes a ~50
+5. Integrar selectores de perfil de usuario
+6. Robustecer manejo de JSON para evitar errores
+
+#### Lo que Logramos:
+
+**1. Limpieza y Estado Estable** ✅
+- ✅ Resuelto merge conflict en `api/analyze.js` (línea de CANTIDAD)
+- ✅ Eliminados completamente selectores de perfil incompletos
+- ✅ Removidas 192 líneas de código problemático
+- ✅ App compila sin errores
+- ✅ Commit: `c69ce44` - "fix: resolver merge conflict y eliminar selectores de perfil"
+
+**2. Mejora de Detección de Ambiente** ✅
+- ✅ **Problema identificado:** Toggle de API/Mock visible en producción
+- ✅ **Causa:** Lógica asumía que todo `vercel.app` era preview
+- ✅ **Solución implementada:**
+  - Método primario: Variable de entorno `REACT_APP_VERCEL_ENV`
+  - Método fallback: Detección inteligente por hostname
+    - Preview: `xxx-git-branch.vercel.app` o múltiples guiones
+    - Production: dominios simples o custom
+- ✅ Creado `VERCEL_SETUP.md` (102 líneas) con guía completa
+- ✅ Commit: `7a53fd4` - "fix: mejorar detección de ambiente"
+
+**3. Mejora de Interacción de Medicamentos** ✅
+- ✅ **Cambio de personalidad:**
+  - **ANTES:** Nerds que explican mecanismos (SERT, 5-HT1A, GABA-A)
+  - **AHORA:** Roommates que comentan en tiempo real
+- ✅ **Nuevos ejemplos de interacción:**
+  - Romántico: "espera 20 mins, estoy recalibrando tus impulsos"
+  - Gym: "dale duro, yo me encargo de la dopamina cuando termines"
+  - Sueño: "sí, esa es mi culpa, pero en 2 semanas se pasa"
+  - Cotidiano: "hey, enfócate, estoy tratando de ayudarte y tú con TikTok"
+- ✅ 50+ ejemplos variados por contexto
+- ✅ Menos lenguaje técnico, más reacciones situacionales
+
+**4. Aumento de Mensajes** ✅
+- ✅ **ANTES:** 30-35 mensajes
+- ✅ **AHORA:** 45-50 mensajes
+- ✅ Refuerzos de seguridad para JSON:
+  - ⚠️ Prohibición explícita de emojis en campo "text"
+  - ⚠️ Solo texto, números, \n permitidos
+  - ⚠️ Priorizar completar JSON sobre agregar más mensajes
+- ✅ Commit: `a70546c` - "feat: mejorar interacción de medicamentos y aumentar mensajes a 45-50"
+
+**5. Selectores de Perfil de Usuario** ✅
+- ✅ **Frontend (`src/App.js`):**
+  - Género: Hombre, Mujer, No binario, Prefiero no decir
+  - Orientación: Hetero, Gay/Lesbiana, Bi, Prefiero no decir
+  - Situación sentimental: Multi-select (Pareja, Situationship, Crush, Solterísimo, Recién terminado)
+  - Estados guardados en localStorage
+  - UI con botones gradient cuando seleccionados
+- ✅ **Backend (`api/analyze.js`):**
+  - Función `generatePrompt()` acepta `userProfile`
+  - Construye contexto personalizado
+  - Ajusta pronombres, referencias románticas, situaciones
+  - Instrucción explícita: "USA ESTA INFORMACIÓN para personalizar el 35% de social anxiety"
+
+**6. Robustecimiento de JSON** ✅
+- ✅ **Función `repairJSON()`:**
+  - Detecta JSONs truncados (count de llaves/corchetes)
+  - Remueve trailing commas automáticamente
+  - Remueve contenido incompleto después de última coma
+  - Cierra strings abiertos
+  - Cierra arrays y objetos faltantes
+  - Logging detallado con emojis (🔧📊✅⚠️)
+- ✅ **Limpieza de caracteres:**
+  - Remueve caracteres de control problemáticos
+  - Convierte comillas tipográficas a normales
+  - Mantiene solo \n, \r, \t como especiales
+- ✅ **Aumento de max_tokens:**
+  - **ANTES:** 3000 tokens
+  - **AHORA:** 4500 tokens (50% más)
+- ✅ **Instrucciones reforzadas:**
+  - 10 reglas críticas para JSON
+  - "COMPLETA SIEMPRE EL JSON"
+  - "Es mejor 40 mensajes completos que 50 truncados"
+
+**7. Retry Automático para Errores de Red** ✅
+- ✅ **Problema:** Error transitorio `UND_ERR_SOCKET` (conexión cerrada)
+- ✅ **Solución:** Función `fetchWithRetry()`
+  - 2 intentos automáticos
+  - 2 segundos de espera entre reintentos
+  - Solo reintenta errores de red (no errores de API)
+  - Logging detallado de cada intento
+- ✅ Usuario ya no necesita reintentar manualmente
+
+**8. Regla de Protocolo sobre Git** ✅
+- ✅ **ESTABLECIDO:** Claude solo hace código
+- ✅ Usuario maneja todo lo relacionado con Git:
+  - Commits
+  - Push
+  - Checkout
+  - Merge
+  - Branches
+- ✅ Claude solo hace git cuando se le pida específicamente (para arreglar errores)
+
+#### Archivos Creados:
+- `VERCEL_SETUP.md` - Guía de configuración de variables de entorno (102 líneas)
+
+#### Archivos Modificados:
+- `api/analyze.js` - Múltiples mejoras:
+  - Función `generatePrompt()` con soporte de userProfile
+  - Personalidad de medicamentos redefinida
+  - Instrucciones JSON reforzadas
+  - Función `repairJSON()` agregada (70 líneas)
+  - Función `fetchWithRetry()` agregada (25 líneas)
+  - Limpieza de caracteres problemáticos
+  - max_tokens: 3000 → 4500
+- `src/App.js` - Selectores de perfil:
+  - Estados agregados (gender, orientation, relationshipStatus)
+  - Funciones de actualización
+  - UI completa con botones
+  - Envío al backend
+
+#### Decisiones Técnicas:
+
+**¿Por qué cambiar personalidad de medicamentos?**
+- **Antes:** Demasiado técnico, menos útil en situaciones reales
+- **Ahora:** Se meten en decisiones del momento, más práctico
+- Ejemplo: "no le respondas ahora" vs "estoy modulando GABA-A"
+
+**¿Por qué 45-50 mensajes en vez de 30-35?**
+- Conversaciones más ricas y completas
+- Suficiente espacio para desarrollar arcos narrativos
+- Con max_tokens: 4500, es manejable
+- Reparación de JSON como safety net
+
+**¿Por qué retry automático?**
+- Errores de red son transitorios y comunes con APIs externas
+- Mejor UX: usuario no necesita reintentar
+- Solo 2 intentos (no infinito) para evitar loops
+
+**¿Por qué robustecer JSON en vez de acortar?**
+- Usuario quería conversaciones más largas, no más cortas
+- Reparación permite recuperar JSONs parciales
+- max_tokens aumentado da más espacio
+- Multi-layer approach: prevención + reparación
+
+#### Métricas:
+
+**Commits realizados:** 3 (todos por el usuario)
+```
+c69ce44 - fix: resolver merge conflict y eliminar selectores de perfil
+7a53fd4 - fix: mejorar detección de ambiente para ocultar toggle en production
+a70546c - feat: mejorar interacción de medicamentos y aumentar mensajes a 45-50
+```
+
+**Branch de trabajo:** `feature/improve-medication-chat`
+
+**Líneas de código agregadas:**
+- `api/analyze.js`: ~150 líneas (repairJSON, fetchWithRetry, mejoras)
+- `src/App.js`: ~90 líneas (selectores de perfil)
+- `VERCEL_SETUP.md`: 102 líneas nuevas
+- **Total:** ~340 líneas nuevas
+
+**Líneas de código removidas:**
+- Selectores incompletos: 192 líneas
+- Código simplificado: ~30 líneas
+
+**Funcionalidades nuevas:** 5
+1. Selectores de perfil de usuario
+2. Reparación automática de JSON
+3. Retry automático para errores de red
+4. Detección mejorada de ambiente
+5. Nueva personalidad de medicamentos (integrada)
+
+#### Problemas Encontrados y Soluciones:
+
+**Problema 1: Merge conflict sin resolver**
+- **Causa:** Revert incompleto de sesión anterior
+- **Solución:** Edición manual del conflicto
+- **Resultado:** ✅ Estado estable restaurado
+
+**Problema 2: Toggle visible en producción**
+- **Causa:** Lógica de detección simplista
+- **Solución:** Dual-method detection (env var + hostname patterns)
+- **Resultado:** ✅ Toggle solo en preview
+
+**Problema 3: JSONs truncados (error 500)**
+- **Causa:** Conversaciones largas excedían max_tokens
+- **Solución:**
+  - Aumentar max_tokens: 3000 → 4500
+  - Función repairJSON()
+  - Instrucciones reforzadas
+- **Resultado:** ✅ JSON reparado automáticamente
+
+**Problema 4: Error de red transitorio**
+- **Causa:** Timeout/conexión cerrada por Anthropic API
+- **Solución:** fetchWithRetry() con 2 intentos
+- **Resultado:** ✅ Retry automático exitoso
+
+#### Innovaciones Clave:
+
+**1. Medicamentos como Roommates**
+La mayor innovación de esta sesión. Los medicamentos ya no son profesores que explican química, sino amigos que:
+- Comentan lo que pasa: "hey, enfócate"
+- Dan consejos prácticos: "espera 30 mins"
+- Admiten culpas: "sí, esa somnolencia soy yo"
+- Se meten en decisiones: "no le respondas ahora"
+
+**2. Reparación Inteligente de JSON**
+No solo detectar errores, sino repararlos:
+- Analizar estructura (count de llaves/corchetes)
+- Identificar último punto válido
+- Remover contenido truncado
+- Cerrar estructuras abiertas
+- Reintentar parse
+
+**3. Personalización por Perfil**
+Conversaciones adaptadas a:
+- Género → pronombres correctos
+- Orientación → referencias románticas apropiadas
+- Situación sentimental → temas relevantes (crush, pareja, etc.)
+
+**4. Dual-Method Environment Detection**
+- Primary: Variable de entorno (confiable, explícito)
+- Fallback: Pattern matching en hostname (automático)
+- Funciona incluso sin configuración manual
+
+#### Estado al Final de la Sesión:
+
+**Git:**
+- ✅ Branch actual: `feature/improve-medication-chat`
+- ✅ Todos los cambios pusheados a producción (por el usuario)
+- ✅ App funcionando en producción con mejoras
+
+**Funcionando:**
+- ✅ App corriendo en localhost:3000
+- ✅ Selectores de perfil operativos
+- ✅ Conversaciones de 45-50 mensajes
+- ✅ Medicamentos con nueva personalidad
+- ✅ Reparación de JSON funcional
+- ✅ Retry automático probado
+
+**En Producción:**
+- ✅ Toggle oculto en production
+- ✅ JSONs robustos con reparación
+- ✅ Retry automático para errores de red
+- ✅ Personalización por perfil activa
+
+#### Logs de Ejemplo:
+
+**Reparación de JSON exitosa:**
+```
+🔧 Iniciando reparación de JSON...
+📊 Balance: Braces 150/148, Brackets 3/2
+⚠️ JSON truncado detectado
+✅ Cerrado bracket [1/1]
+✅ Cerrada llave {1/2}
+✅ Cerrada llave {2/2}
+✅ JSON reparado exitosamente
+```
+
+**Retry automático exitoso:**
+```
+🌐 Intentando llamada a API (intento 1/2)...
+⚠️ Error de red en intento 1, reintentando en 2 segundos...
+🌐 Intentando llamada a API (intento 2/2)...
+✅ Llamada exitosa en intento 2
+```
+
+#### Aprendizajes de la Sesión:
+
+1. **Robustez sobre Perfección:** Mejor reparar JSONs que restringir longitud
+2. **Multi-layer Approach:** Prevención (instrucciones) + Reparación (función)
+3. **Retry Pattern:** Errores transitorios son comunes, retry automático mejora UX
+4. **Environment Detection:** Dual-method (explicit + implicit) es más robusto
+5. **Personalidad de IA:** "Roommate" es más útil que "profesor" para esta app
+6. **Git Protocol:** Separación clara de responsabilidades (Claude=código, Usuario=git)
+
+#### Próxima Sesión - Plan Sugerido:
+
+**Prioridad Alta:**
+1. Probar selectores de perfil con conversaciones reales
+2. Verificar que personalización funciona correctamente
+3. Monitorear logs de reparación de JSON (qué tan frecuente)
+4. Ajustar cantidad de mensajes si hay muchos JSONs truncados
+
+**Prioridad Media:**
+5. Agregar más ejemplos de interacción de medicamentos
+6. Considerar agregar más opciones de perfil (edad, contexto laboral, etc.)
+7. Testing de accesibilidad con selectores
+
+**Preparación:**
+- Leer este documento al inicio
+- Probar la app con diferentes perfiles
+- Observar si la personalización es notable en las conversaciones
+
+---
+
 ---
 
 ## 🚀 ROADMAP Y PRÓXIMOS PASOS
 
 ### Prioridad Alta
-- [ ] Merge de `develop` a `master` y deploy a producción
-- [ ] Probar app con medicamentos reales (verificar personajes generados)
+- [✅] Selectores de perfil de usuario - **COMPLETADO Sesión 3**
+- [✅] Robustecimiento de JSON - **COMPLETADO Sesión 3**
+- [✅] Mejorar interacción de medicamentos - **COMPLETADO Sesión 3**
+- [✅] Detección de ambiente mejorada - **COMPLETADO Sesión 3**
+- [ ] Probar selectores de perfil con casos reales (verificar personalización)
+- [ ] Monitorear frecuencia de reparación de JSON
 - [ ] Agregar disclaimer médico explícito visible en UI
 - [ ] Revisar prompts con profesional de salud mental
 - [✅] Configurar deployment (Vercel u otra plataforma) - **COMPLETADO Sesión 1**
 - [✅] Iterar tono narrativo - **COMPLETADO Sesión 2 (Instagram DM)**
 - [✅] Generación dinámica de personajes - **COMPLETADO Sesión 2**
+- [✅] Conversaciones más largas - **COMPLETADO Sesión 3 (45-50 mensajes)**
 
 ### Prioridad Media
 - [✅] Mover API key a backend seguro - **COMPLETADO Sesión 1**
-- [✅] Mejorar manejo de errores - **COMPLETADO Sesión 1**
-- [✅] Agregar contexto educativo sobre medicamentos - **COMPLETADO Sesión 2**
+- [✅] Mejorar manejo de errores - **COMPLETADO Sesión 1 & 3**
+- [✅] Agregar contexto educativo sobre medicamentos - **COMPLETADO Sesión 2 & 3**
+- [✅] Retry automático para errores de red - **COMPLETADO Sesión 3**
 - [ ] Agregar más tipos de medicamentos a detección
+- [ ] Considerar más opciones de perfil (edad, contexto laboral)
 - [ ] Testing de accesibilidad
 - [ ] Testing con usuarios reales
+- [ ] Ajustar cantidad de mensajes según feedback de JSONs
 
 ### Prioridad Baja
 - [✅] Animaciones de transición - **COMPLETADO Sesión 2 (fade-in)**
@@ -601,6 +946,7 @@ El prompt solicita específicamente español chileno casual:
 - [ ] Temas de color personalizables (actualmente dark theme fijo)
 - [ ] PWA features
 - [ ] Modo offline
+- [ ] Gráficos de progreso temporal
 
 ---
 
@@ -619,10 +965,21 @@ ANTHROPIC_API_KEY=tu_api_key_aqui
 ```
 
 **Producción (Vercel Dashboard):**
-- Settings → Environment Variables
-- Key: `ANTHROPIC_API_KEY`
-- Value: [tu API key]
-- Environments: Production, Preview, Development
+
+1. **ANTHROPIC_API_KEY** (Requerida):
+   - Settings → Environment Variables
+   - Value: [tu API key de Anthropic]
+   - Environments: Production, Preview, Development
+
+2. **REACT_APP_VERCEL_ENV** (Recomendada - Sesión 3):
+   - Para Production:
+     - Value: `production`
+     - Environment: ✅ Solo Production
+   - Para Preview:
+     - Value: `preview`
+     - Environment: ✅ Solo Preview
+   - Propósito: Mejorar detección de ambiente (toggle solo en preview)
+   - Ver: `VERCEL_SETUP.md` para guía completa
 
 ### Comandos
 ```bash
@@ -663,8 +1020,20 @@ npm test           # Tests
 **Asistente:** Claude (Anthropic)
 **Control de versiones:** Git + Sublime Merge (anteriormente GitKraken)
 **Branch principal:** `master` (producción)
-**Branch de desarrollo:** `develop` (features nuevas)
+**Branch de desarrollo:** `develop` o feature branches
 **Comunicación:** Este documento se actualiza al final de cada sesión
+
+### ⚠️ PROTOCOLO DE GIT (IMPORTANTE)
+**Claude:**
+- ✅ Solo hace código (editar archivos, escribir funciones)
+- ❌ NO hace comandos de git (commit, push, checkout, merge, branch)
+- ✅ Solo hace git cuando Branko lo pida específicamente (para arreglar errores)
+
+**Branko:**
+- ✅ Maneja TODO lo relacionado con Git
+- ✅ Commits, push, checkout, merge, branches
+- ✅ Decide cuándo y cómo hacer commits
+- ✅ Gestiona el flujo de trabajo con Sublime Merge
 
 ### Protocolo de Actualización
 1. Branko da la orden: "Actualiza la memoria"
@@ -672,9 +1041,9 @@ npm test           # Tests
 3. Branko hace commit en Git desde Sublime Merge
 
 ### Workflow de Git
-1. Desarrollo en branch `develop`
-2. Commits frecuentes con mensajes descriptivos
-3. Cuando feature está lista: merge `develop` → `master`
+1. Desarrollo en branch `develop` o feature branches
+2. Commits frecuentes con mensajes descriptivos (por Branko)
+3. Cuando feature está lista: merge → `master` (por Branko)
 4. Vercel auto-deploys cuando detecta cambios en `master`
 
 ---
@@ -686,9 +1055,10 @@ npm test           # Tests
 2. Priorizar privacidad y ética por encima de features
 3. El tono debe ser honesto, cercano (español chileno), nunca condescendiente
 4. NO somos profesionales médicos - nunca diagnosticar
-5. Branko maneja Git con Sublime Merge, Claude escribe código
+5. **⚠️ PROTOCOLO GIT:** Claude solo hace código. Branko maneja TODO lo de Git (commits, push, checkout, merge, branches). Claude solo hace git cuando se le pida específicamente para arreglar errores.
 6. Personajes se generan dinámicamente según medicamentos
 7. Contenido debe ser educativo sobre mecanismos farmacológicos
+8. Medicamentos son "roommates" que comentan en tiempo real, NO profesores
 
 ### Aprendizajes Clave
 - localStorage es suficiente para MVP (no necesita DB aún)
@@ -698,6 +1068,12 @@ npm test           # Tests
 - Español chileno normaliza conversación sobre salud mental
 - Personalización basada en medicamentos mejora relevancia
 - Generación dinámica de personajes es más útil que personajes fijos
+- **Robustez > Perfección:** Reparar JSONs es mejor que restringir longitud
+- **Multi-layer approach:** Prevención + Reparación = mejor que solo uno
+- **Retry automático** mejora UX significativamente con APIs externas
+- **Dual-method detection** (explicit + fallback) es más confiable
+- Medicamentos como "roommates" es más útil que como "profesores"
+- **Separación de responsabilidades:** Claude código, Usuario git
 
 ---
 
@@ -711,6 +1087,10 @@ npm test           # Tests
 6. ¿Las explicaciones farmacológicas son precisas y comprensibles?
 7. ¿Deberíamos agregar modo claro además del dark theme?
 8. ¿Cómo medimos si la app efectivamente reduce estigma?
+9. **NUEVO (Sesión 3):** ¿La personalización por perfil es notable en las conversaciones?
+10. **NUEVO (Sesión 3):** ¿Qué tan frecuente es la reparación de JSON? ¿Necesitamos ajustar max_tokens?
+11. **NUEVO (Sesión 3):** ¿Los medicamentos como "roommates" son más útiles que como "profesores"?
+12. **NUEVO (Sesión 3):** ¿45-50 mensajes es la longitud óptima o debería ajustarse?
 
 ---
 

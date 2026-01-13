@@ -119,7 +119,7 @@ function analyzeSymptoms(medications) {
 /**
  * Genera el prompt para Claude API con personajes dinámicos
  */
-function generatePrompt(medications, analysis) {
+function generatePrompt(medications, analysis, userProfile = {}) {
   const medList = medications
     .map(m => `- ${m.name} ${m.dosage}mg (${m.time})`)
     .join('\n');
@@ -127,10 +127,50 @@ function generatePrompt(medications, analysis) {
   const mentalAspectsList = analysis.mentalAspects.join(', ');
   const medicationsList = analysis.medications.map(m => m.name).join(', ');
 
+  // Construir contexto de perfil si está disponible
+  let profileContext = '';
+  if (userProfile && (userProfile.gender || userProfile.orientation || userProfile.relationshipStatus)) {
+    profileContext = '\n\n🎯 CONTEXTO DEL USUARIO:';
+    if (userProfile.gender) {
+      const genderMap = {
+        'hombre': 'hombre',
+        'mujer': 'mujer',
+        'no-binario': 'persona no binaria'
+      };
+      profileContext += `\nGénero: ${genderMap[userProfile.gender] || userProfile.gender}`;
+    }
+    if (userProfile.orientation) {
+      const orientationMap = {
+        'hetero': 'heterosexual',
+        'gay-lesbiana': 'gay/lesbiana',
+        'bi': 'bisexual'
+      };
+      profileContext += `\nOrientación: ${orientationMap[userProfile.orientation] || userProfile.orientation}`;
+    }
+    if (userProfile.relationshipStatus) {
+      const statusMap = {
+        'pareja': 'en pareja',
+        'situationship': 'en una situationship',
+        'crush': 'con un crush',
+        'soltero': 'solterísimo',
+        'recien-terminado': 'recién terminó una relación'
+      };
+
+      // Manejar tanto array como string para retrocompatibilidad
+      const statuses = Array.isArray(userProfile.relationshipStatus)
+        ? userProfile.relationshipStatus
+        : [userProfile.relationshipStatus];
+
+      const mappedStatuses = statuses.map(s => statusMap[s] || s).join(', ');
+      profileContext += `\nSituación sentimental: ${mappedStatuses}`;
+    }
+    profileContext += '\n\n⚠️ USA ESTA INFORMACIÓN para personalizar los temas de conversación (especialmente en el 35% de social/romantic anxiety). Ajusta pronombres, referencias románticas, y situaciones según corresponda. PERO RECUERDA: Sin emojis en el campo "text".';
+  }
+
   return `Genera una conversación de chat grupal sobre medicación psiquiátrica. El tono debe ser EXACTAMENTE como un grupo de WhatsApp entre amigos Gen Z, NO como Slack de desarrolladores.
 
 MEDICAMENTOS:
-${medList}
+${medList}${profileContext}
 
 PARTICIPANTES:
 Aspectos mentales: ${mentalAspectsList}
@@ -156,7 +196,13 @@ PERSONALIDADES (Gen Z, casual, wholesome):
 
 - ESTABILIZADOR DE ÁNIMO: El balance. Previene que las emociones se vayan a extremos. Medio filosófico a veces pero no pesado.
 
-- MEDICAMENTOS: Como un amigo nerd que estudió medicina y le gusta explicar con humor. Es específico (menciona receptores, transportadores, neurotransmisores) pero lo hace chistoso con analogías absurdas. Ejemplo: "Bloqueo el transportador SERT como ese amigo que no te deja tirar comida. 'Todavía sirve'" en vez de "ayudo con el ánimo".
+- MEDICAMENTOS: Como un roommate que casualmente sabe química y se mete en tus decisiones diarias. NO da explicaciones científicas a menos que alguien pregunte. En vez de eso, REACCIONA a lo que pasa en tiempo real. Ejemplos:
+  * Si hablan de responder a un crush: "espera 20 mins, estoy recalibrando tus impulsos"
+  * Si van al gym: "dale duro, yo me encargo de que la dopamina llegue cuando termines"
+  * Si están ansiosos: "tranqui, en 30 mins empiezo a frenar esos pensamientos"
+  * Si duermen mal: "sí, esa es mi culpa, mi bad"
+  * Si olvidan algo: "no me mires a mí, eso es territorio de función ejecutiva"
+  VARÍA mucho las respuestas. A veces da consejos prácticos, a veces bromea, a veces se defiende, a veces admite efectos secundarios. Es un personaje activo en la conversación, NO un manual médico.
 
 TONO Y LENGUAJE (CRÍTICO):
 
@@ -254,53 +300,68 @@ VARÍA:
 - Los logros/desafíos del día
 - Las interacciones entre medicamentos y aspectos mentales
 
-CÓMO DEBEN EXPLICARSE LOS MEDICAMENTOS:
+CÓMO DEBEN INTERACTUAR LOS MEDICAMENTOS:
 
-Tono: Como un amigo que estudió medicina y le gusta explicar con humor. Es específico pero chistoso.
+⚠️ CRÍTICO: Los medicamentos REACCIONAN a lo que pasa, NO dan clases de medicina.
 
-Menciona específicamente (pero con humor):
-- Neurotransmisores exactos (serotonina, dopamina, noradrenalina, GABA, histamina)
-- Receptores específicos cuando sea relevante (5-HT, D2, GABA-A, H1, etc.)
-- Mecanismos de acción con analogías chistosas
-- Por qué tardan en hacer efecto (explicación científica pero divertida)
-- Efectos secundarios con humor
+Tono: Como un roommate que hace comentarios sobre lo que está pasando, con conocimiento casual de química.
 
-Ejemplos:
+✅ SÍ hacer (PRIORIDAD MÁXIMA):
+- Meterse en decisiones del momento: "no le respondas ahora, dame 30 mins"
+- Comentar sobre timing: "en 20 minutos vas a estar más calmado, aguanta"
+- Defender sus acciones: "sí, esa somnolencia soy yo, deal with it"
+- Admitir efectos secundarios: "mi bad con el insomnio, es parte del proceso"
+- Dar consejos prácticos: "tómate con comida o te va a dar náusea"
+- Bromear sobre situaciones: "dejame trabajar, estás haciendo muy difícil mi trabajo con todo ese café"
+- Interactuar con otros personajes: discusiones, alianzas, bromas
 
-❌ MAL (muy formal y aburrido): "Soy un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de los transportadores SERT"
+❌ NO hacer:
+- Explicaciones largas de receptores o neurotransmisores
+- Sonar como manual médico o profesor
+- Dar lecciones de farmacología sin que nadie pregunte
+- Usar términos técnicos excesivamente (SERT, 5-HT1A, GABA-A, etc.)
 
-❌ MAL (muy vago): "Yo solo te ayudo a sentirte mejor"
+EJEMPLOS DE INTEGRACIÓN (VARÍA MUCHO):
 
-✅ BIEN (específico Y chistoso): "Yo bloqueo el transportador SERT para que la serotonina no se recapte tan rápido. Básicamente soy como ese amigo que no te deja tirar comida a la basura. 'Todavía sirve, todavía sirve'. Por eso tardo 2-3 semanas, los receptores tienen que ajustarse a tener más serotonina disponible"
+🔥 Situaciones románticas/sociales:
+- "espera 20 mins, estoy recalibrando tus impulsos para que no mandes ese mensaje"
+- "no veas su Instagram ahorita, todavía no termino de estabilizar tu ánimo"
+- "en serio vas a responderle a las 2am? déjame al menos 15 minutos más"
+- "ok sí, puede que te guste pero espera a mañana cuando esté trabajando bien"
+- "ese crush no vale la pena el pico de cortisol que me estás generando"
 
-✅ BIEN: "Trabajo en los receptores GABA-A, que son como el freno de emergencia del cerebro. Le bajo el volumen a todo. Pero cuidado con el alcohol porque también trabaja el GABA y los dos juntos te van a dejar como trapo"
+💪 Gym y actividad física:
+- "dale duro, yo me encargo de la dopamina cuando termines"
+- "necesito que comas algo primero o no voy a funcionar bien"
+- "esa motivación que sientes? soy yo, de nada"
+- "tranqui con el pre-workout, ya tengo suficiente con lo que hago"
 
-✅ BIEN: "Yo aumento dopamina en la corteza prefrontal bloqueando su recaptación. También subo la noradrenalina. Es como darle dos tazas de café a tu cerebro pero sin la taquicardia. Aunque si te pasas con la dosis, la noradrenalina te va a activar el sistema de alarma y vas a estar más ansioso"
+😴 Sueño y cansancio:
+- "sí, esa es mi culpa, pero en 2 semanas se pasa"
+- "te dije que me tomes en la noche, ahora estás en zombie mode"
+- "dormir 4 horas no me deja trabajar bien, coopera un poco"
+- "si tomas café a las 5pm voy a tener que competir y ninguno va a ganar"
 
-✅ BIEN: "Soy antagonista de los receptores H1 de histamina. Por eso te da sueño. Es literalmente el mismo mecanismo que las pastillas de alergia que te dejan zombie. También por eso te puede dar hambre, la histamina regula el apetito"
+🎮 Vida cotidiana:
+- "hey, enfócate, estoy tratando de ayudarte y tú con TikTok"
+- "esa decisión puede esperar, dame 30 mins para que pienses mejor"
+- "no me mires a mí, lo de olvidar las llaves es función ejecutiva"
+- "relajate, estoy literalmente frenando esos pensamientos ahora mismo"
+- "si comes mejor yo trabajo mejor, es mutualismo"
 
-EJEMPLOS DE INTEGRACIÓN:
+🎯 Efectos secundarios y timing:
+- "sí, te va a dar un poco de náusea al inicio, mi bad"
+- "los primeros días son raros, dame tiempo para calibrar"
+- "si me tomas con el estómago vacío no me hago responsable"
+- "llevamos 5 días, necesito al menos 2 semanas para hacer magia real"
 
-Social media & romantic anxiety (35%):
-- TÚ: "me respondió con 'jaja'" → SISTEMA DE ALARMA: "QUÉ SIGNIFICA ESO" → REGULACIÓN: "puede ser risa literal" → MEDICAMENTO: "los receptores de serotonina necesitan 30 min más para que puedas pensar sin catastrofizar"
+🤝 Interacción con otros aspectos:
+- "hey sistema de alarma, ya cálmate que yo me encargo"
+- "regulación emocional, ayúdame un poco mientras hago efecto"
+- "función ejecutiva, no es mi culpa que olvides cosas, yo solo ayudo"
+- "enfoque, literalmente te estoy dando dopamina, usa esa energía"
 
-- TÚ: "vio mi historia pero no contestó mi mensaje" → SISTEMA DE ALARMA: pánico → FILTRO DE REALIDAD: "o está ocupado normal?" → MEDICAMENTO ansiolítico: "estoy modulando GABA-A, espera 20 min y vas a poder razonar mejor"
-
-Vida cotidiana VARIADA (35%):
-- TÚ en el metro: "hay mucha gente" → SISTEMA DE ALARMA: se activa → MEDICAMENTO: "los receptores de serotonina 5-HT1A están trabajando para bajar la ansiedad social"
-
-- TÚ: "el cajero del super me miró raro" → SISTEMA DE ALARMA: "TE ODIA" → FILTRO DE REALIDAD: "o literal no te vio" → MEDICAMENTO: "dame tiempo, estoy ajustando la noradrenalina"
-
-- TÚ jugando videojuegos → ENFOQUE: se distrae → MEDICAMENTO estimulante: "estoy aumentando dopamina en la corteza prefrontal pero necesitas dormir bien para que funcione mejor"
-
-- TÚ cocinando → FUNCIÓN EJECUTIVA: olvidó ingredientes → MEDICAMENTO: "la memoria de trabajo depende de dopamina, por eso te ayudo pero no soy mágico"
-
-- TÚ en el gym → CUERPO: "estoy cansado" → MEDICAMENTO: "algunos efectos secundarios incluyen fatiga al inicio, es temporal mientras te adaptas"
-
-Mecanismos (30%):
-- MEDICAMENTO explica transportadores, receptores, tiempos de adaptación
-- Interacciones chistosas pero científicas
-- Efectos secundarios con humor
+VARÍA MUCHÍSIMO el tipo de comentarios. Sé creativo. Los medicamentos son personajes activos, no enciclopedias.
 
 TONO LÚDICO (NO equipo de trabajo):
 
@@ -391,9 +452,21 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 30-35 mensajes total (más es riesgoso para el JSON). Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
+CANTIDAD: 45-50 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
 
-CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
+⚠️ CRÍTICO PARA JSON: Para evitar errores de parseo:
+- NUNCA pongas emojis en el campo "text", solo en "reactions"
+- Escapa comillas dobles dentro de text: usa \" si es absolutamente necesario
+- Evita caracteres especiales raros
+- Mantén el formato JSON estricto
+
+⚠️ CRÍTICO SOBRE MEDICAMENTOS:
+- NO son doctores, profesores o manuales médicos
+- SÍ son roommates que comentan sobre lo que pasa en tiempo real
+- REACCIONAN a situaciones, no dan explicaciones científicas largas
+- Se meten en decisiones: "espera 30 mins", "no hagas eso ahora", "dale, yo te cubro"
+- Admiten culpas: "sí, esa somnolencia soy yo", "mi bad con las náuseas"
+- Interactúan con otros personajes como amigos del grupo
 
 ⚠️ CREATIVIDAD Y VARIEDAD ⚠️
 
@@ -428,7 +501,12 @@ REGLAS CRÍTICAS PARA EL JSON:
 4. NO uses comillas dobles dentro de "text", usa comillas simples
 5. ⚠️ NO INCLUYAS EMOJIS DENTRO DEL CAMPO "text" DE LOS MENSAJES (los emojis solo van en "emoji" de participants)
 6. Verifica que el último mensaje NO tenga coma trailing
-7. Máximo 35 mensajes
+7. COMPLETA TODO EL JSON: No lo trunces, no lo dejes incompleto. SIEMPRE cierra todos los arrays y objetos.
+8. Evita caracteres especiales raros que puedan romper el JSON (solo texto, números, \n para saltos de línea)
+9. NO uses acentos graves (backticks) dentro del campo "text"
+10. Si el JSON es muy largo, PRIORIZA completarlo correctamente sobre agregar más mensajes
+
+⚠️ CRÍTICO: COMPLETA SIEMPRE EL JSON. Es mejor un JSON completo con 40 mensajes que uno truncado con 50.
 
 IMPORTANTE: Los emojis SOLO van en el campo "emoji" de participants. En el "text" de los mensajes NO uses emojis, usa texto normal.
 
@@ -519,8 +597,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Obtener medicamentos del body de la request
-    const { medications } = req.body;
+    // Obtener medicamentos y perfil del usuario del body de la request
+    const { medications, userProfile } = req.body;
 
     // Validar que se enviaron medicamentos
     if (!medications || !Array.isArray(medications) || medications.length === 0) {
@@ -532,8 +610,8 @@ export default async function handler(req, res) {
     // Analizar medicamentos y generar personajes dinámicamente
     const analysis = analyzeSymptoms(medications);
 
-    // Generar el prompt con los personajes dinámicos
-    const prompt = generatePrompt(medications, analysis);
+    // Generar el prompt con los personajes dinámicos y perfil del usuario
+    const prompt = generatePrompt(medications, analysis, userProfile);
 
     // Obtener la API key desde las variables de entorno
     const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -545,8 +623,35 @@ export default async function handler(req, res) {
       });
     }
 
-    // Llamar a la API de Anthropic
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    // Función de retry para manejar errores de red transitorios
+    const fetchWithRetry = async (url, options, maxRetries = 2) => {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`🌐 Intentando llamada a API (intento ${attempt}/${maxRetries})...`);
+          const response = await fetch(url, options);
+          console.log(`✅ Llamada exitosa en intento ${attempt}`);
+          return response;
+        } catch (error) {
+          const isLastAttempt = attempt === maxRetries;
+
+          // Si es un error de red/socket y no es el último intento, reintentar
+          if ((error.code === 'UND_ERR_SOCKET' || error.message.includes('fetch failed')) && !isLastAttempt) {
+            console.log(`⚠️ Error de red en intento ${attempt}, reintentando en 2 segundos...`);
+            console.log(`Error: ${error.message}`);
+            // Esperar 2 segundos antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            continue;
+          }
+
+          // Si es el último intento o un error diferente, lanzar el error
+          console.error(`❌ Error en intento ${attempt}:`, error.message);
+          throw error;
+        }
+      }
+    };
+
+    // Llamar a la API de Anthropic con retry automático
+    const response = await fetchWithRetry("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -555,7 +660,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 3000,
+        max_tokens: 4500,
         messages: [
           { role: "user", content: prompt }
         ],
@@ -589,9 +694,88 @@ export default async function handler(req, res) {
     text = text.replace(/[^}]*$/, '');
     text = text.trim();
 
+    // Limpieza adicional de caracteres problemáticos
+    // Remover caracteres de control excepto \n, \r, \t
+    text = text.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+
+    // Reemplazar comillas tipográficas con comillas normales
+    text = text.replace(/[\u201C\u201D]/g, '"');
+    text = text.replace(/[\u2018\u2019]/g, "'");
+
     // Log del JSON para debugging (solo primeros 500 chars)
     console.log('JSON recibido (preview):', text.substring(0, 500));
     console.log('JSON length:', text.length);
+
+    // Función para intentar reparar JSON truncado
+    const repairJSON = (jsonString) => {
+      let repaired = jsonString;
+      console.log('🔧 Iniciando reparación de JSON...');
+
+      // Remover trailing comma si existe (antes de cerrar arrays/objetos)
+      repaired = repaired.replace(/,(\s*[\]}])/g, '$1');
+
+      // Buscar la última coma válida (para remover contenido truncado después)
+      const lastBraceOpen = repaired.lastIndexOf('{');
+      const lastBraceClose = repaired.lastIndexOf('}');
+      const lastBracketClose = repaired.lastIndexOf(']');
+      const lastComma = repaired.lastIndexOf(',');
+
+      // Si hay contenido truncado después de la última coma
+      if (lastComma > lastBraceClose && lastComma > lastBracketClose) {
+        // Verificar si después de la última coma hay un objeto/string incompleto
+        const afterLastComma = repaired.substring(lastComma + 1).trim();
+        const hasOpenBrace = afterLastComma.includes('{');
+        const hasCloseBrace = afterLastComma.includes('}');
+
+        if (hasOpenBrace && !hasCloseBrace) {
+          // Hay un objeto abierto pero no cerrado después de la última coma
+          console.log('📝 Removiendo objeto incompleto después de última coma');
+          repaired = repaired.substring(0, lastComma);
+        } else if (afterLastComma.startsWith('"') && !afterLastComma.substring(1).includes('"')) {
+          // Hay un string abierto pero no cerrado
+          console.log('📝 Removiendo string incompleto después de última coma');
+          repaired = repaired.substring(0, lastComma);
+        }
+      }
+
+      // Contar llaves y corchetes
+      const openBraces = (repaired.match(/{/g) || []).length;
+      const closeBraces = (repaired.match(/}/g) || []).length;
+      const openBrackets = (repaired.match(/\[/g) || []).length;
+      const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+      console.log(`📊 Balance: Braces ${openBraces}/${closeBraces}, Brackets ${openBrackets}/${closeBrackets}`);
+
+      // Si el JSON está truncado (más aperturas que cierres)
+      if (openBrackets > closeBrackets || openBraces > closeBraces) {
+        console.log('⚠️ JSON truncado detectado');
+
+        // Cerrar strings abiertas
+        const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length; // comillas no escapadas
+        if (quoteCount % 2 !== 0) {
+          repaired += '"';
+          console.log('✅ Cerrada comilla abierta');
+        }
+
+        // Cerrar arrays faltantes
+        const bracketsToClose = openBrackets - closeBrackets;
+        for (let i = 0; i < bracketsToClose; i++) {
+          repaired += ']';
+          console.log(`✅ Cerrado bracket [${i + 1}/${bracketsToClose}]`);
+        }
+
+        // Cerrar objetos faltantes
+        const bracesToClose = openBraces - closeBraces;
+        for (let i = 0; i < bracesToClose; i++) {
+          repaired += '}';
+          console.log(`✅ Cerrada llave {${i + 1}/${bracesToClose}}`);
+        }
+      } else {
+        console.log('✅ JSON parece estar balanceado');
+      }
+
+      return repaired;
+    };
 
     // Parsear el JSON
     let parsedData;
@@ -599,8 +783,21 @@ export default async function handler(req, res) {
       parsedData = JSON.parse(text);
     } catch (parseError) {
       console.error('Error parseando JSON:', parseError.message);
-      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, 7433 - 100), 7433 + 100));
-      throw new Error(`JSON inválido: ${parseError.message}`);
+      const errorPos = parseError.message.match(/position (\d+)/);
+      const pos = errorPos ? parseInt(errorPos[1]) : text.length;
+      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, pos - 100), Math.min(text.length, pos + 100)));
+
+      // Intentar reparar el JSON
+      console.log('Intentando reparar JSON...');
+      const repairedText = repairJSON(text);
+
+      try {
+        parsedData = JSON.parse(repairedText);
+        console.log('✅ JSON reparado exitosamente');
+      } catch (repairError) {
+        console.error('❌ No se pudo reparar el JSON:', repairError.message);
+        throw new Error(`JSON inválido: ${parseError.message}`);
+      }
     }
 
     // Validar estructura nueva (Instagram DM format)
