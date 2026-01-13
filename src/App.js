@@ -22,16 +22,48 @@ function App() {
 
   // Detectar ambiente
   const getEnvironment = () => {
+    // Método 1: Variable de entorno (más confiable)
+    // En Vercel, configura REACT_APP_VERCEL_ENV en Settings > Environment Variables
+    // con valor "production" para producción y "preview" para preview
+    const vercelEnv = process.env.REACT_APP_VERCEL_ENV;
+    if (vercelEnv === 'production') {
+      return 'production';
+    }
+    if (vercelEnv === 'preview') {
+      return 'preview';
+    }
+
+    // Método 2: Detección por hostname (fallback)
     const hostname = window.location.hostname;
+
+    // Local development
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'local';
     }
-    // Si tiene vercel.app pero no es tu dominio custom
+
+    // Vercel preview deployments tienen patrones específicos:
+    // - xxx-git-branchname-username.vercel.app (git branch deployments)
+    // - xxx-hash-username.vercel.app (commit deployments)
+    // Production deployment es simplemente: xxx-username.vercel.app o dominio custom
     if (hostname.includes('vercel.app')) {
-      // Aquí puedes poner tu dominio de producción si tienes uno custom
-      // Por ahora asumimos que cualquier vercel.app es preview
-      return 'preview';
+      // Si contiene '-git-' es un preview deployment de una branch
+      if (hostname.includes('-git-')) {
+        return 'preview';
+      }
+      // Si contiene un hash de commit (formato: xxx-[a-z0-9]{9}-username.vercel.app)
+      // Lo detectamos por tener múltiples guiones
+      const parts = hostname.split('.');
+      const subdomain = parts[0]; // ej: "mental-health-app-abc123def-username"
+      const dashCount = (subdomain.match(/-/g) || []).length;
+      // Preview deployments suelen tener 3+ guiones, production solo 2 o menos
+      if (dashCount >= 3) {
+        return 'preview';
+      }
+      // Si no cumple los patrones de preview, es production
+      return 'production';
     }
+
+    // Dominio custom = production
     return 'production';
   };
 
