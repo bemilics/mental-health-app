@@ -501,7 +501,12 @@ REGLAS CRÍTICAS PARA EL JSON:
 4. NO uses comillas dobles dentro de "text", usa comillas simples
 5. ⚠️ NO INCLUYAS EMOJIS DENTRO DEL CAMPO "text" DE LOS MENSAJES (los emojis solo van en "emoji" de participants)
 6. Verifica que el último mensaje NO tenga coma trailing
-7. Máximo 35 mensajes
+7. COMPLETA TODO EL JSON: No lo trunces, no lo dejes incompleto. SIEMPRE cierra todos los arrays y objetos.
+8. Evita caracteres especiales raros que puedan romper el JSON (solo texto, números, \n para saltos de línea)
+9. NO uses acentos graves (backticks) dentro del campo "text"
+10. Si el JSON es muy largo, PRIORIZA completarlo correctamente sobre agregar más mensajes
+
+⚠️ CRÍTICO: COMPLETA SIEMPRE EL JSON. Es mejor un JSON completo con 40 mensajes que uno truncado con 50.
 
 IMPORTANTE: Los emojis SOLO van en el campo "emoji" de participants. En el "text" de los mensajes NO uses emojis, usa texto normal.
 
@@ -628,7 +633,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 3000,
+        max_tokens: 4500,
         messages: [
           { role: "user", content: prompt }
         ],
@@ -662,9 +667,88 @@ export default async function handler(req, res) {
     text = text.replace(/[^}]*$/, '');
     text = text.trim();
 
+    // Limpieza adicional de caracteres problemáticos
+    // Remover caracteres de control excepto \n, \r, \t
+    text = text.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+
+    // Reemplazar comillas tipográficas con comillas normales
+    text = text.replace(/[\u201C\u201D]/g, '"');
+    text = text.replace(/[\u2018\u2019]/g, "'");
+
     // Log del JSON para debugging (solo primeros 500 chars)
     console.log('JSON recibido (preview):', text.substring(0, 500));
     console.log('JSON length:', text.length);
+
+    // Función para intentar reparar JSON truncado
+    const repairJSON = (jsonString) => {
+      let repaired = jsonString;
+      console.log('🔧 Iniciando reparación de JSON...');
+
+      // Remover trailing comma si existe (antes de cerrar arrays/objetos)
+      repaired = repaired.replace(/,(\s*[\]}])/g, '$1');
+
+      // Buscar la última coma válida (para remover contenido truncado después)
+      const lastBraceOpen = repaired.lastIndexOf('{');
+      const lastBraceClose = repaired.lastIndexOf('}');
+      const lastBracketClose = repaired.lastIndexOf(']');
+      const lastComma = repaired.lastIndexOf(',');
+
+      // Si hay contenido truncado después de la última coma
+      if (lastComma > lastBraceClose && lastComma > lastBracketClose) {
+        // Verificar si después de la última coma hay un objeto/string incompleto
+        const afterLastComma = repaired.substring(lastComma + 1).trim();
+        const hasOpenBrace = afterLastComma.includes('{');
+        const hasCloseBrace = afterLastComma.includes('}');
+
+        if (hasOpenBrace && !hasCloseBrace) {
+          // Hay un objeto abierto pero no cerrado después de la última coma
+          console.log('📝 Removiendo objeto incompleto después de última coma');
+          repaired = repaired.substring(0, lastComma);
+        } else if (afterLastComma.startsWith('"') && !afterLastComma.substring(1).includes('"')) {
+          // Hay un string abierto pero no cerrado
+          console.log('📝 Removiendo string incompleto después de última coma');
+          repaired = repaired.substring(0, lastComma);
+        }
+      }
+
+      // Contar llaves y corchetes
+      const openBraces = (repaired.match(/{/g) || []).length;
+      const closeBraces = (repaired.match(/}/g) || []).length;
+      const openBrackets = (repaired.match(/\[/g) || []).length;
+      const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+      console.log(`📊 Balance: Braces ${openBraces}/${closeBraces}, Brackets ${openBrackets}/${closeBrackets}`);
+
+      // Si el JSON está truncado (más aperturas que cierres)
+      if (openBrackets > closeBrackets || openBraces > closeBraces) {
+        console.log('⚠️ JSON truncado detectado');
+
+        // Cerrar strings abiertas
+        const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length; // comillas no escapadas
+        if (quoteCount % 2 !== 0) {
+          repaired += '"';
+          console.log('✅ Cerrada comilla abierta');
+        }
+
+        // Cerrar arrays faltantes
+        const bracketsToClose = openBrackets - closeBrackets;
+        for (let i = 0; i < bracketsToClose; i++) {
+          repaired += ']';
+          console.log(`✅ Cerrado bracket [${i + 1}/${bracketsToClose}]`);
+        }
+
+        // Cerrar objetos faltantes
+        const bracesToClose = openBraces - closeBraces;
+        for (let i = 0; i < bracesToClose; i++) {
+          repaired += '}';
+          console.log(`✅ Cerrada llave {${i + 1}/${bracesToClose}}`);
+        }
+      } else {
+        console.log('✅ JSON parece estar balanceado');
+      }
+
+      return repaired;
+    };
 
     // Parsear el JSON
     let parsedData;
@@ -672,8 +756,21 @@ export default async function handler(req, res) {
       parsedData = JSON.parse(text);
     } catch (parseError) {
       console.error('Error parseando JSON:', parseError.message);
-      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, 7433 - 100), 7433 + 100));
-      throw new Error(`JSON inválido: ${parseError.message}`);
+      const errorPos = parseError.message.match(/position (\d+)/);
+      const pos = errorPos ? parseInt(errorPos[1]) : text.length;
+      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, pos - 100), Math.min(text.length, pos + 100)));
+
+      // Intentar reparar el JSON
+      console.log('Intentando reparar JSON...');
+      const repairedText = repairJSON(text);
+
+      try {
+        parsedData = JSON.parse(repairedText);
+        console.log('✅ JSON reparado exitosamente');
+      } catch (repairError) {
+        console.error('❌ No se pudo reparar el JSON:', repairError.message);
+        throw new Error(`JSON inválido: ${parseError.message}`);
+      }
     }
 
     // Validar estructura nueva (Instagram DM format)
