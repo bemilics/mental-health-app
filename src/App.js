@@ -13,6 +13,25 @@ function App() {
   const [dosage, setDosage] = useState('');
   const [time, setTime] = useState('morning');
 
+  // Datos de perfil del usuario
+  const [gender, setGender] = useState(() => {
+    return localStorage.getItem('mental-health-gender') || 'no-especificado';
+  });
+  const [orientation, setOrientation] = useState(() => {
+    return localStorage.getItem('mental-health-orientation') || 'no-especificado';
+  });
+  const [relationshipStatus, setRelationshipStatus] = useState(() => {
+    const saved = localStorage.getItem('mental-health-relationship');
+    if (saved && saved !== 'no-especificado') {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [saved];
+      }
+    }
+    return [];
+  });
+
   // Feature flag: controla si usar API real o mock data
   const [useRealAPI, setUseRealAPI] = useState(() => {
     // En localStorage guardamos la preferencia para preview
@@ -97,6 +116,34 @@ function App() {
     saveMeds(newMeds);
   };
 
+  const updateGender = (value) => {
+    setGender(value);
+    localStorage.setItem('mental-health-gender', value);
+  };
+
+  const updateOrientation = (value) => {
+    setOrientation(value);
+    localStorage.setItem('mental-health-orientation', value);
+  };
+
+  const updateRelationshipStatus = (value) => {
+    setRelationshipStatus(prev => {
+      let newStatus;
+      if (value === 'no-especificado') {
+        newStatus = [];
+      } else {
+        const isSelected = prev.includes(value);
+        if (isSelected) {
+          newStatus = prev.filter(s => s !== value);
+        } else {
+          newStatus = [...prev, value];
+        }
+      }
+      localStorage.setItem('mental-health-relationship', JSON.stringify(newStatus));
+      return newStatus;
+    });
+  };
+
   const generateReport = async () => {
     setThinking(true);
     setError(null);
@@ -134,7 +181,12 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          medications: meds
+          medications: meds,
+          userProfile: {
+            gender: gender !== 'no-especificado' ? gender : null,
+            orientation: orientation !== 'no-especificado' ? orientation : null,
+            relationshipStatus: relationshipStatus.length > 0 ? relationshipStatus : null
+          }
         })
       });
 
@@ -331,6 +383,95 @@ function App() {
                   🔧 Ambiente: {environment} {isLocal && '(siempre mock)'}
                 </div>
               )}
+            </div>
+
+            {/* Perfil del usuario (opcional) */}
+            <div className="bg-[#2a2a2a] rounded-2xl p-6 space-y-4 shadow-xl">
+              <h2 className="text-lg font-semibold text-white">Tu Perfil (Opcional)</h2>
+              <div className="text-sm text-gray-400">Esto personaliza la conversación para ti</div>
+
+              {/* Género */}
+              <div>
+                <div className="text-sm text-gray-400 mb-2">Género</div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { value: 'hombre', label: 'Hombre' },
+                    { value: 'mujer', label: 'Mujer' },
+                    { value: 'no-binario', label: 'No binario' },
+                    { value: 'no-especificado', label: 'Prefiero no decir' }
+                  ].map(option => (
+                    <button
+                      key={option.value}
+                      onClick={() => updateGender(option.value)}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                        gender === option.value
+                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
+                          : 'bg-black/30 text-gray-400 hover:bg-black/50 border border-gray-700'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Orientación Sexual */}
+              <div>
+                <div className="text-sm text-gray-400 mb-2">Orientación Sexual</div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { value: 'hetero', label: 'Hetero' },
+                    { value: 'gay-lesbiana', label: 'Gay/Lesbiana' },
+                    { value: 'bi', label: 'Bi' },
+                    { value: 'no-especificado', label: 'Prefiero no decir' }
+                  ].map(option => (
+                    <button
+                      key={option.value}
+                      onClick={() => updateOrientation(option.value)}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                        orientation === option.value
+                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
+                          : 'bg-black/30 text-gray-400 hover:bg-black/50 border border-gray-700'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Situación Sentimental */}
+              <div>
+                <div className="text-sm text-gray-400 mb-2">Situación Sentimental (puedes seleccionar varios)</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {[
+                    { value: 'pareja', label: 'En pareja' },
+                    { value: 'situationship', label: 'Situationship' },
+                    { value: 'crush', label: 'Con crush' },
+                    { value: 'soltero', label: 'Solterísimo' },
+                    { value: 'recien-terminado', label: 'Recién terminado' },
+                    { value: 'no-especificado', label: 'Limpiar selección' }
+                  ].map(option => {
+                    const isSelected = option.value === 'no-especificado'
+                      ? relationshipStatus.length === 0
+                      : relationshipStatus.includes(option.value);
+
+                    return (
+                      <button
+                        key={option.value}
+                        onClick={() => updateRelationshipStatus(option.value)}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                          isSelected
+                            ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
+                            : 'bg-black/30 text-gray-400 hover:bg-black/50 border border-gray-700'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* Agregar medicamento */}

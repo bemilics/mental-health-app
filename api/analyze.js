@@ -119,7 +119,7 @@ function analyzeSymptoms(medications) {
 /**
  * Genera el prompt para Claude API con personajes dinámicos
  */
-function generatePrompt(medications, analysis) {
+function generatePrompt(medications, analysis, userProfile = {}) {
   const medList = medications
     .map(m => `- ${m.name} ${m.dosage}mg (${m.time})`)
     .join('\n');
@@ -127,10 +127,50 @@ function generatePrompt(medications, analysis) {
   const mentalAspectsList = analysis.mentalAspects.join(', ');
   const medicationsList = analysis.medications.map(m => m.name).join(', ');
 
+  // Construir contexto de perfil si está disponible
+  let profileContext = '';
+  if (userProfile && (userProfile.gender || userProfile.orientation || userProfile.relationshipStatus)) {
+    profileContext = '\n\nCONTEXTO DEL USUARIO:';
+    if (userProfile.gender) {
+      const genderMap = {
+        'hombre': 'hombre',
+        'mujer': 'mujer',
+        'no-binario': 'persona no binaria'
+      };
+      profileContext += `\nGénero: ${genderMap[userProfile.gender] || userProfile.gender}`;
+    }
+    if (userProfile.orientation) {
+      const orientationMap = {
+        'hetero': 'heterosexual',
+        'gay-lesbiana': 'gay/lesbiana',
+        'bi': 'bisexual'
+      };
+      profileContext += `\nOrientación: ${orientationMap[userProfile.orientation] || userProfile.orientation}`;
+    }
+    if (userProfile.relationshipStatus) {
+      const statusMap = {
+        'pareja': 'en pareja',
+        'situationship': 'en una situationship',
+        'crush': 'con un crush',
+        'soltero': 'solterísimo',
+        'recien-terminado': 'recién terminó una relación'
+      };
+
+      // Manejar tanto array como string para retrocompatibilidad
+      const statuses = Array.isArray(userProfile.relationshipStatus)
+        ? userProfile.relationshipStatus
+        : [userProfile.relationshipStatus];
+
+      const mappedStatuses = statuses.map(s => statusMap[s] || s).join(', ');
+      profileContext += `\nSituación sentimental: ${mappedStatuses}`;
+    }
+    profileContext += '\n\nUSA ESTA INFORMACIÓN para personalizar los temas de conversación (especialmente en el 35% de social/romantic anxiety). Ajusta pronombres, referencias románticas, y situaciones según corresponda.';
+  }
+
   return `Genera una conversación de chat grupal sobre medicación psiquiátrica. El tono debe ser EXACTAMENTE como un grupo de WhatsApp entre amigos Gen Z, NO como Slack de desarrolladores.
 
 MEDICAMENTOS:
-${medList}
+${medList}${profileContext}
 
 PARTICIPANTES:
 Aspectos mentales: ${mentalAspectsList}
@@ -519,8 +559,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Obtener medicamentos del body de la request
-    const { medications } = req.body;
+    // Obtener medicamentos y perfil del usuario del body de la request
+    const { medications, userProfile } = req.body;
 
     // Validar que se enviaron medicamentos
     if (!medications || !Array.isArray(medications) || medications.length === 0) {
@@ -532,8 +572,8 @@ export default async function handler(req, res) {
     // Analizar medicamentos y generar personajes dinámicamente
     const analysis = analyzeSymptoms(medications);
 
-    // Generar el prompt con los personajes dinámicos
-    const prompt = generatePrompt(medications, analysis);
+    // Generar el prompt con los personajes dinámicos y perfil del usuario
+    const prompt = generatePrompt(medications, analysis, userProfile);
 
     // Obtener la API key desde las variables de entorno
     const apiKey = process.env.ANTHROPIC_API_KEY;
