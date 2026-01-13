@@ -156,7 +156,13 @@ PERSONALIDADES (Gen Z, casual, wholesome):
 
 - ESTABILIZADOR DE ÁNIMO: El balance. Previene que las emociones se vayan a extremos. Medio filosófico a veces pero no pesado.
 
-- MEDICAMENTOS: Como un amigo nerd que estudió medicina y le gusta explicar con humor. Es específico (menciona receptores, transportadores, neurotransmisores) pero lo hace chistoso con analogías absurdas. Ejemplo: "Bloqueo el transportador SERT como ese amigo que no te deja tirar comida. 'Todavía sirve'" en vez de "ayudo con el ánimo".
+- MEDICAMENTOS: Como un roommate que casualmente sabe química y se mete en tus decisiones diarias. NO da explicaciones científicas a menos que alguien pregunte. En vez de eso, REACCIONA a lo que pasa en tiempo real. Ejemplos:
+  * Si hablan de responder a un crush: "espera 20 mins, estoy recalibrando tus impulsos"
+  * Si van al gym: "dale duro, yo me encargo de que la dopamina llegue cuando termines"
+  * Si están ansiosos: "tranqui, en 30 mins empiezo a frenar esos pensamientos"
+  * Si duermen mal: "sí, esa es mi culpa, mi bad"
+  * Si olvidan algo: "no me mires a mí, eso es territorio de función ejecutiva"
+  VARÍA mucho las respuestas. A veces da consejos prácticos, a veces bromea, a veces se defiende, a veces admite efectos secundarios. Es un personaje activo en la conversación, NO un manual médico.
 
 TONO Y LENGUAJE (CRÍTICO):
 
@@ -254,53 +260,68 @@ VARÍA:
 - Los logros/desafíos del día
 - Las interacciones entre medicamentos y aspectos mentales
 
-CÓMO DEBEN EXPLICARSE LOS MEDICAMENTOS:
+CÓMO DEBEN INTERACTUAR LOS MEDICAMENTOS:
 
-Tono: Como un amigo que estudió medicina y le gusta explicar con humor. Es específico pero chistoso.
+⚠️ CRÍTICO: Los medicamentos REACCIONAN a lo que pasa, NO dan clases de medicina.
 
-Menciona específicamente (pero con humor):
-- Neurotransmisores exactos (serotonina, dopamina, noradrenalina, GABA, histamina)
-- Receptores específicos cuando sea relevante (5-HT, D2, GABA-A, H1, etc.)
-- Mecanismos de acción con analogías chistosas
-- Por qué tardan en hacer efecto (explicación científica pero divertida)
-- Efectos secundarios con humor
+Tono: Como un roommate que hace comentarios sobre lo que está pasando, con conocimiento casual de química.
 
-Ejemplos:
+✅ SÍ hacer (PRIORIDAD MÁXIMA):
+- Meterse en decisiones del momento: "no le respondas ahora, dame 30 mins"
+- Comentar sobre timing: "en 20 minutos vas a estar más calmado, aguanta"
+- Defender sus acciones: "sí, esa somnolencia soy yo, deal with it"
+- Admitir efectos secundarios: "mi bad con el insomnio, es parte del proceso"
+- Dar consejos prácticos: "tómate con comida o te va a dar náusea"
+- Bromear sobre situaciones: "dejame trabajar, estás haciendo muy difícil mi trabajo con todo ese café"
+- Interactuar con otros personajes: discusiones, alianzas, bromas
 
-❌ MAL (muy formal y aburrido): "Soy un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de los transportadores SERT"
+❌ NO hacer:
+- Explicaciones largas de receptores o neurotransmisores
+- Sonar como manual médico o profesor
+- Dar lecciones de farmacología sin que nadie pregunte
+- Usar términos técnicos excesivamente (SERT, 5-HT1A, GABA-A, etc.)
 
-❌ MAL (muy vago): "Yo solo te ayudo a sentirte mejor"
+EJEMPLOS DE INTEGRACIÓN (VARÍA MUCHO):
 
-✅ BIEN (específico Y chistoso): "Yo bloqueo el transportador SERT para que la serotonina no se recapte tan rápido. Básicamente soy como ese amigo que no te deja tirar comida a la basura. 'Todavía sirve, todavía sirve'. Por eso tardo 2-3 semanas, los receptores tienen que ajustarse a tener más serotonina disponible"
+🔥 Situaciones románticas/sociales:
+- "espera 20 mins, estoy recalibrando tus impulsos para que no mandes ese mensaje"
+- "no veas su Instagram ahorita, todavía no termino de estabilizar tu ánimo"
+- "en serio vas a responderle a las 2am? déjame al menos 15 minutos más"
+- "ok sí, puede que te guste pero espera a mañana cuando esté trabajando bien"
+- "ese crush no vale la pena el pico de cortisol que me estás generando"
 
-✅ BIEN: "Trabajo en los receptores GABA-A, que son como el freno de emergencia del cerebro. Le bajo el volumen a todo. Pero cuidado con el alcohol porque también trabaja el GABA y los dos juntos te van a dejar como trapo"
+💪 Gym y actividad física:
+- "dale duro, yo me encargo de la dopamina cuando termines"
+- "necesito que comas algo primero o no voy a funcionar bien"
+- "esa motivación que sientes? soy yo, de nada"
+- "tranqui con el pre-workout, ya tengo suficiente con lo que hago"
 
-✅ BIEN: "Yo aumento dopamina en la corteza prefrontal bloqueando su recaptación. También subo la noradrenalina. Es como darle dos tazas de café a tu cerebro pero sin la taquicardia. Aunque si te pasas con la dosis, la noradrenalina te va a activar el sistema de alarma y vas a estar más ansioso"
+😴 Sueño y cansancio:
+- "sí, esa es mi culpa, pero en 2 semanas se pasa"
+- "te dije que me tomes en la noche, ahora estás en zombie mode"
+- "dormir 4 horas no me deja trabajar bien, coopera un poco"
+- "si tomas café a las 5pm voy a tener que competir y ninguno va a ganar"
 
-✅ BIEN: "Soy antagonista de los receptores H1 de histamina. Por eso te da sueño. Es literalmente el mismo mecanismo que las pastillas de alergia que te dejan zombie. También por eso te puede dar hambre, la histamina regula el apetito"
+🎮 Vida cotidiana:
+- "hey, enfócate, estoy tratando de ayudarte y tú con TikTok"
+- "esa decisión puede esperar, dame 30 mins para que pienses mejor"
+- "no me mires a mí, lo de olvidar las llaves es función ejecutiva"
+- "relajate, estoy literalmente frenando esos pensamientos ahora mismo"
+- "si comes mejor yo trabajo mejor, es mutualismo"
 
-EJEMPLOS DE INTEGRACIÓN:
+🎯 Efectos secundarios y timing:
+- "sí, te va a dar un poco de náusea al inicio, mi bad"
+- "los primeros días son raros, dame tiempo para calibrar"
+- "si me tomas con el estómago vacío no me hago responsable"
+- "llevamos 5 días, necesito al menos 2 semanas para hacer magia real"
 
-Social media & romantic anxiety (35%):
-- TÚ: "me respondió con 'jaja'" → SISTEMA DE ALARMA: "QUÉ SIGNIFICA ESO" → REGULACIÓN: "puede ser risa literal" → MEDICAMENTO: "los receptores de serotonina necesitan 30 min más para que puedas pensar sin catastrofizar"
+🤝 Interacción con otros aspectos:
+- "hey sistema de alarma, ya cálmate que yo me encargo"
+- "regulación emocional, ayúdame un poco mientras hago efecto"
+- "función ejecutiva, no es mi culpa que olvides cosas, yo solo ayudo"
+- "enfoque, literalmente te estoy dando dopamina, usa esa energía"
 
-- TÚ: "vio mi historia pero no contestó mi mensaje" → SISTEMA DE ALARMA: pánico → FILTRO DE REALIDAD: "o está ocupado normal?" → MEDICAMENTO ansiolítico: "estoy modulando GABA-A, espera 20 min y vas a poder razonar mejor"
-
-Vida cotidiana VARIADA (35%):
-- TÚ en el metro: "hay mucha gente" → SISTEMA DE ALARMA: se activa → MEDICAMENTO: "los receptores de serotonina 5-HT1A están trabajando para bajar la ansiedad social"
-
-- TÚ: "el cajero del super me miró raro" → SISTEMA DE ALARMA: "TE ODIA" → FILTRO DE REALIDAD: "o literal no te vio" → MEDICAMENTO: "dame tiempo, estoy ajustando la noradrenalina"
-
-- TÚ jugando videojuegos → ENFOQUE: se distrae → MEDICAMENTO estimulante: "estoy aumentando dopamina en la corteza prefrontal pero necesitas dormir bien para que funcione mejor"
-
-- TÚ cocinando → FUNCIÓN EJECUTIVA: olvidó ingredientes → MEDICAMENTO: "la memoria de trabajo depende de dopamina, por eso te ayudo pero no soy mágico"
-
-- TÚ en el gym → CUERPO: "estoy cansado" → MEDICAMENTO: "algunos efectos secundarios incluyen fatiga al inicio, es temporal mientras te adaptas"
-
-Mecanismos (30%):
-- MEDICAMENTO explica transportadores, receptores, tiempos de adaptación
-- Interacciones chistosas pero científicas
-- Efectos secundarios con humor
+VARÍA MUCHÍSIMO el tipo de comentarios. Sé creativo. Los medicamentos son personajes activos, no enciclopedias.
 
 TONO LÚDICO (NO equipo de trabajo):
 
@@ -391,9 +412,21 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 30-35 mensajes total (más es riesgoso para el JSON). Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
+CANTIDAD: 45-50 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
 
-CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
+⚠️ CRÍTICO PARA JSON: Para evitar errores de parseo:
+- NUNCA pongas emojis en el campo "text", solo en "reactions"
+- Escapa comillas dobles dentro de text: usa \" si es absolutamente necesario
+- Evita caracteres especiales raros
+- Mantén el formato JSON estricto
+
+⚠️ CRÍTICO SOBRE MEDICAMENTOS:
+- NO son doctores, profesores o manuales médicos
+- SÍ son roommates que comentan sobre lo que pasa en tiempo real
+- REACCIONAN a situaciones, no dan explicaciones científicas largas
+- Se meten en decisiones: "espera 30 mins", "no hagas eso ahora", "dale, yo te cubro"
+- Admiten culpas: "sí, esa somnolencia soy yo", "mi bad con las náuseas"
+- Interactúan con otros personajes como amigos del grupo
 
 ⚠️ CREATIVIDAD Y VARIEDAD ⚠️
 
