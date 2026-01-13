@@ -119,7 +119,7 @@ function analyzeSymptoms(medications) {
 /**
  * Genera el prompt para Claude API con personajes dinámicos
  */
-function generatePrompt(medications, analysis) {
+function generatePrompt(medications, analysis, userProfile = {}) {
   const medList = medications
     .map(m => `- ${m.name} ${m.dosage}mg (${m.time})`)
     .join('\n');
@@ -127,10 +127,50 @@ function generatePrompt(medications, analysis) {
   const mentalAspectsList = analysis.mentalAspects.join(', ');
   const medicationsList = analysis.medications.map(m => m.name).join(', ');
 
+  // Construir contexto de perfil si está disponible
+  let profileContext = '';
+  if (userProfile && (userProfile.gender || userProfile.orientation || userProfile.relationshipStatus)) {
+    profileContext = '\n\n🎯 CONTEXTO DEL USUARIO:';
+    if (userProfile.gender) {
+      const genderMap = {
+        'hombre': 'hombre',
+        'mujer': 'mujer',
+        'no-binario': 'persona no binaria'
+      };
+      profileContext += `\nGénero: ${genderMap[userProfile.gender] || userProfile.gender}`;
+    }
+    if (userProfile.orientation) {
+      const orientationMap = {
+        'hetero': 'heterosexual',
+        'gay-lesbiana': 'gay/lesbiana',
+        'bi': 'bisexual'
+      };
+      profileContext += `\nOrientación: ${orientationMap[userProfile.orientation] || userProfile.orientation}`;
+    }
+    if (userProfile.relationshipStatus) {
+      const statusMap = {
+        'pareja': 'en pareja',
+        'situationship': 'en una situationship',
+        'crush': 'con un crush',
+        'soltero': 'solterísimo',
+        'recien-terminado': 'recién terminó una relación'
+      };
+
+      // Manejar tanto array como string para retrocompatibilidad
+      const statuses = Array.isArray(userProfile.relationshipStatus)
+        ? userProfile.relationshipStatus
+        : [userProfile.relationshipStatus];
+
+      const mappedStatuses = statuses.map(s => statusMap[s] || s).join(', ');
+      profileContext += `\nSituación sentimental: ${mappedStatuses}`;
+    }
+    profileContext += '\n\n⚠️ USA ESTA INFORMACIÓN para personalizar los temas de conversación (especialmente en el 35% de social/romantic anxiety). Ajusta pronombres, referencias románticas, y situaciones según corresponda. PERO RECUERDA: Sin emojis en el campo "text".';
+  }
+
   return `Genera una conversación de chat grupal sobre medicación psiquiátrica. El tono debe ser EXACTAMENTE como un grupo de WhatsApp entre amigos Gen Z, NO como Slack de desarrolladores.
 
 MEDICAMENTOS:
-${medList}
+${medList}${profileContext}
 
 PARTICIPANTES:
 Aspectos mentales: ${mentalAspectsList}
@@ -461,7 +501,12 @@ REGLAS CRÍTICAS PARA EL JSON:
 4. NO uses comillas dobles dentro de "text", usa comillas simples
 5. ⚠️ NO INCLUYAS EMOJIS DENTRO DEL CAMPO "text" DE LOS MENSAJES (los emojis solo van en "emoji" de participants)
 6. Verifica que el último mensaje NO tenga coma trailing
-7. Máximo 35 mensajes
+7. COMPLETA TODO EL JSON: No lo trunces, no lo dejes incompleto. SIEMPRE cierra todos los arrays y objetos.
+8. Evita caracteres especiales raros que puedan romper el JSON (solo texto, números, \n para saltos de línea)
+9. NO uses acentos graves (backticks) dentro del campo "text"
+10. Si el JSON es muy largo, PRIORIZA completarlo correctamente sobre agregar más mensajes
+
+⚠️ CRÍTICO: COMPLETA SIEMPRE EL JSON. Es mejor un JSON completo con 40 mensajes que uno truncado con 50.
 
 IMPORTANTE: Los emojis SOLO van en el campo "emoji" de participants. En el "text" de los mensajes NO uses emojis, usa texto normal.
 
@@ -552,8 +597,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Obtener medicamentos del body de la request
-    const { medications } = req.body;
+    // Obtener medicamentos y perfil del usuario del body de la request
+    const { medications, userProfile } = req.body;
 
     // Validar que se enviaron medicamentos
     if (!medications || !Array.isArray(medications) || medications.length === 0) {
@@ -565,8 +610,8 @@ export default async function handler(req, res) {
     // Analizar medicamentos y generar personajes dinámicamente
     const analysis = analyzeSymptoms(medications);
 
-    // Generar el prompt con los personajes dinámicos
-    const prompt = generatePrompt(medications, analysis);
+    // Generar el prompt con los personajes dinámicos y perfil del usuario
+    const prompt = generatePrompt(medications, analysis, userProfile);
 
     // Obtener la API key desde las variables de entorno
     const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -578,8 +623,35 @@ export default async function handler(req, res) {
       });
     }
 
-    // Llamar a la API de Anthropic
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    // Función de retry para manejar errores de red transitorios
+    const fetchWithRetry = async (url, options, maxRetries = 2) => {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`🌐 Intentando llamada a API (intento ${attempt}/${maxRetries})...`);
+          const response = await fetch(url, options);
+          console.log(`✅ Llamada exitosa en intento ${attempt}`);
+          return response;
+        } catch (error) {
+          const isLastAttempt = attempt === maxRetries;
+
+          // Si es un error de red/socket y no es el último intento, reintentar
+          if ((error.code === 'UND_ERR_SOCKET' || error.message.includes('fetch failed')) && !isLastAttempt) {
+            console.log(`⚠️ Error de red en intento ${attempt}, reintentando en 2 segundos...`);
+            console.log(`Error: ${error.message}`);
+            // Esperar 2 segundos antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            continue;
+          }
+
+          // Si es el último intento o un error diferente, lanzar el error
+          console.error(`❌ Error en intento ${attempt}:`, error.message);
+          throw error;
+        }
+      }
+    };
+
+    // Llamar a la API de Anthropic con retry automático
+    const response = await fetchWithRetry("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -588,7 +660,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 3000,
+        max_tokens: 4500,
         messages: [
           { role: "user", content: prompt }
         ],
@@ -622,9 +694,88 @@ export default async function handler(req, res) {
     text = text.replace(/[^}]*$/, '');
     text = text.trim();
 
+    // Limpieza adicional de caracteres problemáticos
+    // Remover caracteres de control excepto \n, \r, \t
+    text = text.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+
+    // Reemplazar comillas tipográficas con comillas normales
+    text = text.replace(/[\u201C\u201D]/g, '"');
+    text = text.replace(/[\u2018\u2019]/g, "'");
+
     // Log del JSON para debugging (solo primeros 500 chars)
     console.log('JSON recibido (preview):', text.substring(0, 500));
     console.log('JSON length:', text.length);
+
+    // Función para intentar reparar JSON truncado
+    const repairJSON = (jsonString) => {
+      let repaired = jsonString;
+      console.log('🔧 Iniciando reparación de JSON...');
+
+      // Remover trailing comma si existe (antes de cerrar arrays/objetos)
+      repaired = repaired.replace(/,(\s*[\]}])/g, '$1');
+
+      // Buscar la última coma válida (para remover contenido truncado después)
+      const lastBraceOpen = repaired.lastIndexOf('{');
+      const lastBraceClose = repaired.lastIndexOf('}');
+      const lastBracketClose = repaired.lastIndexOf(']');
+      const lastComma = repaired.lastIndexOf(',');
+
+      // Si hay contenido truncado después de la última coma
+      if (lastComma > lastBraceClose && lastComma > lastBracketClose) {
+        // Verificar si después de la última coma hay un objeto/string incompleto
+        const afterLastComma = repaired.substring(lastComma + 1).trim();
+        const hasOpenBrace = afterLastComma.includes('{');
+        const hasCloseBrace = afterLastComma.includes('}');
+
+        if (hasOpenBrace && !hasCloseBrace) {
+          // Hay un objeto abierto pero no cerrado después de la última coma
+          console.log('📝 Removiendo objeto incompleto después de última coma');
+          repaired = repaired.substring(0, lastComma);
+        } else if (afterLastComma.startsWith('"') && !afterLastComma.substring(1).includes('"')) {
+          // Hay un string abierto pero no cerrado
+          console.log('📝 Removiendo string incompleto después de última coma');
+          repaired = repaired.substring(0, lastComma);
+        }
+      }
+
+      // Contar llaves y corchetes
+      const openBraces = (repaired.match(/{/g) || []).length;
+      const closeBraces = (repaired.match(/}/g) || []).length;
+      const openBrackets = (repaired.match(/\[/g) || []).length;
+      const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+      console.log(`📊 Balance: Braces ${openBraces}/${closeBraces}, Brackets ${openBrackets}/${closeBrackets}`);
+
+      // Si el JSON está truncado (más aperturas que cierres)
+      if (openBrackets > closeBrackets || openBraces > closeBraces) {
+        console.log('⚠️ JSON truncado detectado');
+
+        // Cerrar strings abiertas
+        const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length; // comillas no escapadas
+        if (quoteCount % 2 !== 0) {
+          repaired += '"';
+          console.log('✅ Cerrada comilla abierta');
+        }
+
+        // Cerrar arrays faltantes
+        const bracketsToClose = openBrackets - closeBrackets;
+        for (let i = 0; i < bracketsToClose; i++) {
+          repaired += ']';
+          console.log(`✅ Cerrado bracket [${i + 1}/${bracketsToClose}]`);
+        }
+
+        // Cerrar objetos faltantes
+        const bracesToClose = openBraces - closeBraces;
+        for (let i = 0; i < bracesToClose; i++) {
+          repaired += '}';
+          console.log(`✅ Cerrada llave {${i + 1}/${bracesToClose}}`);
+        }
+      } else {
+        console.log('✅ JSON parece estar balanceado');
+      }
+
+      return repaired;
+    };
 
     // Parsear el JSON
     let parsedData;
@@ -632,8 +783,21 @@ export default async function handler(req, res) {
       parsedData = JSON.parse(text);
     } catch (parseError) {
       console.error('Error parseando JSON:', parseError.message);
-      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, 7433 - 100), 7433 + 100));
-      throw new Error(`JSON inválido: ${parseError.message}`);
+      const errorPos = parseError.message.match(/position (\d+)/);
+      const pos = errorPos ? parseInt(errorPos[1]) : text.length;
+      console.error('JSON problemático (cerca del error):', text.substring(Math.max(0, pos - 100), Math.min(text.length, pos + 100)));
+
+      // Intentar reparar el JSON
+      console.log('Intentando reparar JSON...');
+      const repairedText = repairJSON(text);
+
+      try {
+        parsedData = JSON.parse(repairedText);
+        console.log('✅ JSON reparado exitosamente');
+      } catch (repairError) {
+        console.error('❌ No se pudo reparar el JSON:', repairError.message);
+        throw new Error(`JSON inválido: ${parseError.message}`);
+      }
     }
 
     // Validar estructura nueva (Instagram DM format)
