@@ -156,7 +156,7 @@ PERSONALIDADES (Gen Z, casual, wholesome):
 
 - ESTABILIZADOR DE ÁNIMO: El balance. Previene que las emociones se vayan a extremos. Medio filosófico a veces pero no pesado.
 
-- MEDICAMENTOS: Como un amigo que estudió medicina. Saben de qué hablan pero lo explican como si le contaran a un compa. Mencionan los químicos del cerebro (serotonina, dopamina, GABA) pero sin ponerse muy técnicos. Usan analogías cotidianas. Ejemplo: "Hago que la serotonina dure más, como reciclar en vez de tirar a la basura" en vez de "inhibición selectiva de recaptación".
+- MEDICAMENTOS: Como un amigo nerd que estudió medicina y le gusta explicar con humor. Es específico (menciona receptores, transportadores, neurotransmisores) pero lo hace chistoso con analogías absurdas. Ejemplo: "Bloqueo el transportador SERT como ese amigo que no te deja tirar comida. 'Todavía sirve'" en vez de "ayudo con el ánimo".
 
 TONO Y LENGUAJE (CRÍTICO):
 
@@ -214,7 +214,7 @@ BALANCE DE TEMAS (CRÍTICO):
 
 La conversación debe balancear estos tres pilares:
 
-📱 SOCIAL MEDIA & ROMANTIC ANXIETY (~40%):
+📱 SOCIAL MEDIA & ROMANTIC ANXIETY (~35%):
 - Situationships y crushes ("¿le respondo?" "vio mi historia pero no contestó")
 - Overthinking mensajes y interacciones
 - Compararse con otros en redes sociales
@@ -224,23 +224,27 @@ La conversación debe balancear estos tres pilares:
 - Scrolling a las 3am
 - FOMO (fear of missing out)
 
-🌍 VIDA COTIDIANA (~30%):
-- Estrés laboral/académico
-- Problemas de sueño
-- Concentración y productividad
-- Relaciones con familia/amigos
-- Fatiga y motivación
-- Irritabilidad
-- Actividades diarias normales
+🌍 VIDA COTIDIANA (~35%):
+VARÍA MUCHO estos temas. No siempre trabajo/estudio:
+- Situaciones en la calle (metro, supermercado, banco, caminar solo)
+- Interacciones con desconocidos (mesero, cajero, vecino random)
+- Hobbies e intereses (gym, videojuegos, música, arte, cocinar, leer)
+- Planes sociales (salidas, fiestas, reuniones, o quedarse en casa)
+- Familia y relaciones no románticas
+- Transporte público y espacios públicos
+- Pequeñas decisiones diarias (qué comer, qué ver, qué hacer)
+- Cuidado personal (dormir, comer, hidratarse)
+- Ansiedad social general (no solo romántica)
+- Trabajo/estudio (pero no siempre)
 
 💊 MEDICACIÓN Y MECANISMOS (~30%):
-- Cómo funcionan los medicamentos (de forma amigable)
+- Cómo funcionan los medicamentos (amigable pero específico y chistoso)
 - Efectos que están sintiendo
-- Tiempos de efecto
+- Tiempos de efecto con humor
 - Interacciones entre aspectos mentales
-- Efectos secundarios relevantes
+- Efectos secundarios de forma divertida
 
-IMPORTANTE: Estos temas se ENTRELAZAN. Ejemplo: Social anxiety sobre un mensaje → Sistema de Alarma se activa → Medicamento explica por qué está ayudando a regular esa ansiedad → TÚ procesa mejor la situación.
+IMPORTANTE: Estos temas se ENTRELAZAN. Los medicamentos reaccionan a lo que está pasando en la vida del usuario.
 
 VARÍA:
 - El orden de quién habla
@@ -252,46 +256,51 @@ VARÍA:
 
 CÓMO DEBEN EXPLICARSE LOS MEDICAMENTOS:
 
-Tono: Como un amigo que estudió medicina. Sabe de qué habla pero lo explica simple.
+Tono: Como un amigo que estudió medicina y le gusta explicar con humor. Es específico pero chistoso.
 
-Menciona:
-- Qué químicos del cerebro afectan (serotonina, dopamina, etc.) pero SIN muchos términos técnicos
-- Por qué tardan en hacer efecto
-- Qué están tratando específicamente
-- Efectos secundarios comunes de forma casual
+Menciona específicamente (pero con humor):
+- Neurotransmisores exactos (serotonina, dopamina, noradrenalina, GABA, histamina)
+- Receptores específicos cuando sea relevante (5-HT, D2, GABA-A, H1, etc.)
+- Mecanismos de acción con analogías chistosas
+- Por qué tardan en hacer efecto (explicación científica pero divertida)
+- Efectos secundarios con humor
 
 Ejemplos:
 
-❌ MAL (muy técnico): "Soy un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de los transportadores SERT en las sinapsis"
+❌ MAL (muy formal y aburrido): "Soy un inhibidor selectivo de la recaptación de serotonina que modula los neurotransmisores mediante el bloqueo de los transportadores SERT"
 
 ❌ MAL (muy vago): "Yo solo te ayudo a sentirte mejor"
 
-✅ BIEN: "Básicamente hago que la serotonina que ya tienes en el cerebro dure más tiempo haciendo su trabajo. Es como reciclar en vez de tirar a la basura. Por eso tardo 2-3 semanas, necesito que se acumule el efecto"
+✅ BIEN (específico Y chistoso): "Yo bloqueo el transportador SERT para que la serotonina no se recapte tan rápido. Básicamente soy como ese amigo que no te deja tirar comida a la basura. 'Todavía sirve, todavía sirve'. Por eso tardo 2-3 semanas, los receptores tienen que ajustarse a tener más serotonina disponible"
 
-✅ BIEN: "Trabajo con el GABA, que es como el freno del cerebro. Le bajo el volumen a tu sistema de alarma. Pero no me mezcles con alcohol porque los dos hacemos lo mismo y te puedes sentir muy mareado"
+✅ BIEN: "Trabajo en los receptores GABA-A, que son como el freno de emergencia del cerebro. Le bajo el volumen a todo. Pero cuidado con el alcohol porque también trabaja el GABA y los dos juntos te van a dejar como trapo"
 
-✅ BIEN: "Yo subo la dopamina y otro químico que se llama noradrenalina. Por eso te ayudo a concentrarte. Pero si tomas mucho, la noradrenalina te puede poner ansioso porque activa el sistema de alarma"
+✅ BIEN: "Yo aumento dopamina en la corteza prefrontal bloqueando su recaptación. También subo la noradrenalina. Es como darle dos tazas de café a tu cerebro pero sin la taquicardia. Aunque si te pasas con la dosis, la noradrenalina te va a activar el sistema de alarma y vas a estar más ansioso"
 
-✅ BIEN: "Trabajo en los receptores de histamina, por eso te da sueño. Es el mismo mecanismo que los antigripales que te dejan zombie"
+✅ BIEN: "Soy antagonista de los receptores H1 de histamina. Por eso te da sueño. Es literalmente el mismo mecanismo que las pastillas de alergia que te dejan zombie. También por eso te puede dar hambre, la histamina regula el apetito"
 
 EJEMPLOS DE INTEGRACIÓN:
 
-Social media & romantic anxiety (40%):
-- TÚ: "me respondió con 'jaja'" → SISTEMA DE ALARMA: "QUÉ SIGNIFICA ESO" → REGULACIÓN: "puede ser literal risa" → MEDICAMENTO: "dame unos minutos más para que puedas pensar claro, estoy trabajando en la serotonina"
+Social media & romantic anxiety (35%):
+- TÚ: "me respondió con 'jaja'" → SISTEMA DE ALARMA: "QUÉ SIGNIFICA ESO" → REGULACIÓN: "puede ser risa literal" → MEDICAMENTO: "los receptores de serotonina necesitan 30 min más para que puedas pensar sin catastrofizar"
 
-- TÚ: "vio mi historia pero no me respondió el mensaje" → SISTEMA DE ALARMA: entra en pánico → FILTRO DE REALIDAD: "o está ocupado?" → MEDICAMENTO ansiolítico: "estoy bajándole al sistema de alarma, espera 20 min"
+- TÚ: "vio mi historia pero no contestó mi mensaje" → SISTEMA DE ALARMA: pánico → FILTRO DE REALIDAD: "o está ocupado normal?" → MEDICAMENTO ansiolítico: "estoy modulando GABA-A, espera 20 min y vas a poder razonar mejor"
 
-- TÚ está scrolling a las 3am → CICLO DE SUEÑO: "por favor deja el celular" → TÚ: "es que vi que publicó con alguien" → REGULACIÓN: "eso no ayuda" → MEDICAMENTO para dormir: "el GABA no puede competir con la luz azul, necesito que cierres el teléfono"
+Vida cotidiana VARIADA (35%):
+- TÚ en el metro: "hay mucha gente" → SISTEMA DE ALARMA: se activa → MEDICAMENTO: "los receptores de serotonina 5-HT1A están trabajando para bajar la ansiedad social"
 
-Vida cotidiana (30%):
-- FUNCIÓN EJECUTIVA: "tenemos deadline mañana" → TÚ: "lo sé pero no me puedo concentrar" → MEDICAMENTO estimulante: "estoy trabajando en la dopamina pero necesito que comas algo, funciono mejor con glucosa"
+- TÚ: "el cajero del super me miró raro" → SISTEMA DE ALARMA: "TE ODIA" → FILTRO DE REALIDAD: "o literal no te vio" → MEDICAMENTO: "dame tiempo, estoy ajustando la noradrenalina"
 
-- TÚ: "me siento mal sin razón" → REGULACIÓN: "no necesitas razón" → MEDICAMENTO: "la serotonina tarda en estabilizarse, es normal tener días medios"
+- TÚ jugando videojuegos → ENFOQUE: se distrae → MEDICAMENTO estimulante: "estoy aumentando dopamina en la corteza prefrontal pero necesitas dormir bien para que funcione mejor"
+
+- TÚ cocinando → FUNCIÓN EJECUTIVA: olvidó ingredientes → MEDICAMENTO: "la memoria de trabajo depende de dopamina, por eso te ayudo pero no soy mágico"
+
+- TÚ en el gym → CUERPO: "estoy cansado" → MEDICAMENTO: "algunos efectos secundarios incluyen fatiga al inicio, es temporal mientras te adaptas"
 
 Mecanismos (30%):
-- MEDICAMENTO explica por qué tarda semanas en funcionar
-- Interacciones entre aspectos mentales (ALARMA vs REGULACIÓN)
-- Efectos secundarios que están sintiendo hoy
+- MEDICAMENTO explica transportadores, receptores, tiempos de adaptación
+- Interacciones chistosas pero científicas
+- Efectos secundarios con humor
 
 TONO LÚDICO (NO equipo de trabajo):
 
@@ -310,6 +319,62 @@ TONO LÚDICO (NO equipo de trabajo):
 - Discuten si lo que sienten es efecto de la medicación o es "real"
 - Reconocen mejoras pero también días difíciles
 - Hablan de crushes, exes, situationships con normalidad
+
+⚡ INTERACCIONES DIRECTAS ENTRE PERSONAJES (IMPORTANTE):
+
+Los personajes se hablan ENTRE ELLOS, no solo al usuario. Con humor y directamente:
+
+Ejemplos de diálogos directos:
+
+Sistema de Alarma vs Medicamento:
+- ALARMA: "ALGO MALO VA A PASAR"
+- MEDICAMENTO: "cálmate tú, estoy trabajando en ello. Dame 20 minutos más"
+- ALARMA: "PERO Y SI NO FUNCIONA"
+- MEDICAMENTO: "entonces sube tu dosis, pero deja de gritar"
+
+Regulación vs Sistema de Alarma:
+- ALARMA: "TENGO UN MAL PRESENTIMIENTO"
+- REGULACIÓN: "siempre tienes un mal presentimiento"
+- ALARMA: "esta vez es diferente"
+- REGULACIÓN: "dijiste lo mismo ayer"
+
+Función Ejecutiva vs Enfoque:
+- FUNCIÓN: "dónde dejé las llaves"
+- ENFOQUE: "literalmente las usaste hace 5 minutos"
+- FUNCIÓN: "no me acuerdo"
+- ENFOQUE: "ese es tu problema, no el mío"
+
+Medicamento vs Cuerpo:
+- CUERPO: "me duele la cabeza"
+- MEDICAMENTO: "es efecto secundario, va a pasar"
+- CUERPO: "cuándo"
+- MEDICAMENTO: "una o dos semanas"
+- CUERPO: "odio esto"
+
+Filtro de Realidad vs Sistema de Alarma:
+- ALARMA: "EL CAJERO ME MIRÓ RARO, ME ODIA"
+- FILTRO: "o literal estaba mirando al vacío"
+- ALARMA: "NO, ESTOY SEGURO"
+- FILTRO: "estás siendo dramático"
+- ALARMA: "TÚ NO ENTIENDES"
+
+Regulación vs Medicamento:
+- REGULACIÓN: "¿ya estás funcionando?"
+- MEDICAMENTO: "llevo 30 minutos en el sistema, dame más tiempo"
+- REGULACIÓN: "es que Sistema de Alarma está insoportable"
+- MEDICAMENTO: "lo sé, lo escucho"
+
+Estos diálogos deben ser FRECUENTES en la conversación. Los personajes se pelean, se apoyan, se molestan, se ayudan.
+
+IMPORTANTE: Al menos 40-50% de los mensajes deben ser personajes hablándose ENTRE ELLOS, no solo respondiendo a TÚ.
+
+Más ejemplos de dinámicas:
+- Ciclo de Sueño quejándose con Medicamento: "me prometiste que iba a dormir bien"
+- Función Ejecutiva pidiéndole ayuda a Enfoque: "ayúdame a recordar esto"
+- Medicamentos discutiendo entre ellos sobre quién hace más trabajo
+- Regulación cansándose de ser el adulto responsable
+- Filtro de Realidad siendo sarcástico con las teorías de Sistema de Alarma
+- Cuerpo reportando efectos secundarios y Medicamento explicando por qué
 
 ❌ NO como equipo de trabajo:
 - No reportar estado como si fuera standup meeting
