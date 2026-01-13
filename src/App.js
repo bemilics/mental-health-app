@@ -13,25 +13,6 @@ function App() {
   const [dosage, setDosage] = useState('');
   const [time, setTime] = useState('morning');
 
-  // Datos de perfil del usuario
-  const [gender, setGender] = useState(() => {
-    return localStorage.getItem('mental-health-gender') || 'no-especificado';
-  });
-  const [orientation, setOrientation] = useState(() => {
-    return localStorage.getItem('mental-health-orientation') || 'no-especificado';
-  });
-  const [relationshipStatus, setRelationshipStatus] = useState(() => {
-    const saved = localStorage.getItem('mental-health-relationship');
-    if (saved && saved !== 'no-especificado') {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return [saved];
-      }
-    }
-    return [];
-  });
-
   // Feature flag: controla si usar API real o mock data
   const [useRealAPI, setUseRealAPI] = useState(() => {
     // En localStorage guardamos la preferencia para preview
@@ -41,16 +22,48 @@ function App() {
 
   // Detectar ambiente
   const getEnvironment = () => {
+    // Método 1: Variable de entorno (más confiable)
+    // En Vercel, configura REACT_APP_VERCEL_ENV en Settings > Environment Variables
+    // con valor "production" para producción y "preview" para preview
+    const vercelEnv = process.env.REACT_APP_VERCEL_ENV;
+    if (vercelEnv === 'production') {
+      return 'production';
+    }
+    if (vercelEnv === 'preview') {
+      return 'preview';
+    }
+
+    // Método 2: Detección por hostname (fallback)
     const hostname = window.location.hostname;
+
+    // Local development
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'local';
     }
-    // Si tiene vercel.app pero no es tu dominio custom
+
+    // Vercel preview deployments tienen patrones específicos:
+    // - xxx-git-branchname-username.vercel.app (git branch deployments)
+    // - xxx-hash-username.vercel.app (commit deployments)
+    // Production deployment es simplemente: xxx-username.vercel.app o dominio custom
     if (hostname.includes('vercel.app')) {
-      // Aquí puedes poner tu dominio de producción si tienes uno custom
-      // Por ahora asumimos que cualquier vercel.app es preview
-      return 'preview';
+      // Si contiene '-git-' es un preview deployment de una branch
+      if (hostname.includes('-git-')) {
+        return 'preview';
+      }
+      // Si contiene un hash de commit (formato: xxx-[a-z0-9]{9}-username.vercel.app)
+      // Lo detectamos por tener múltiples guiones
+      const parts = hostname.split('.');
+      const subdomain = parts[0]; // ej: "mental-health-app-abc123def-username"
+      const dashCount = (subdomain.match(/-/g) || []).length;
+      // Preview deployments suelen tener 3+ guiones, production solo 2 o menos
+      if (dashCount >= 3) {
+        return 'preview';
+      }
+      // Si no cumple los patrones de preview, es production
+      return 'production';
     }
+
+    // Dominio custom = production
     return 'production';
   };
 
@@ -116,34 +129,6 @@ function App() {
     saveMeds(newMeds);
   };
 
-  const updateGender = (value) => {
-    setGender(value);
-    localStorage.setItem('mental-health-gender', value);
-  };
-
-  const updateOrientation = (value) => {
-    setOrientation(value);
-    localStorage.setItem('mental-health-orientation', value);
-  };
-
-  const updateRelationshipStatus = (value) => {
-    setRelationshipStatus(prev => {
-      let newStatus;
-      if (value === 'no-especificado') {
-        newStatus = [];
-      } else {
-        const isSelected = prev.includes(value);
-        if (isSelected) {
-          newStatus = prev.filter(s => s !== value);
-        } else {
-          newStatus = [...prev, value];
-        }
-      }
-      localStorage.setItem('mental-health-relationship', JSON.stringify(newStatus));
-      return newStatus;
-    });
-  };
-
   const generateReport = async () => {
     setThinking(true);
     setError(null);
@@ -181,12 +166,7 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          medications: meds,
-          userProfile: {
-            gender: gender !== 'no-especificado' ? gender : null,
-            orientation: orientation !== 'no-especificado' ? orientation : null,
-            relationshipStatus: relationshipStatus.length > 0 ? relationshipStatus : null
-          }
+          medications: meds
         })
       });
 
@@ -383,95 +363,6 @@ function App() {
                   🔧 Ambiente: {environment} {isLocal && '(siempre mock)'}
                 </div>
               )}
-            </div>
-
-            {/* Perfil del usuario (opcional) */}
-            <div className="bg-[#2a2a2a] rounded-2xl p-6 space-y-4 shadow-xl">
-              <h2 className="text-lg font-semibold text-white">Tu Perfil (Opcional)</h2>
-              <div className="text-sm text-gray-400">Esto personaliza la conversación para ti</div>
-
-              {/* Género */}
-              <div>
-                <div className="text-sm text-gray-400 mb-2">Género</div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[
-                    { value: 'hombre', label: 'Hombre' },
-                    { value: 'mujer', label: 'Mujer' },
-                    { value: 'no-binario', label: 'No binario' },
-                    { value: 'no-especificado', label: 'Prefiero no decir' }
-                  ].map(option => (
-                    <button
-                      key={option.value}
-                      onClick={() => updateGender(option.value)}
-                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                        gender === option.value
-                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-                          : 'bg-black/30 text-gray-400 hover:bg-black/50 border border-gray-700'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Orientación Sexual */}
-              <div>
-                <div className="text-sm text-gray-400 mb-2">Orientación Sexual</div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[
-                    { value: 'hetero', label: 'Hetero' },
-                    { value: 'gay-lesbiana', label: 'Gay/Lesbiana' },
-                    { value: 'bi', label: 'Bi' },
-                    { value: 'no-especificado', label: 'Prefiero no decir' }
-                  ].map(option => (
-                    <button
-                      key={option.value}
-                      onClick={() => updateOrientation(option.value)}
-                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                        orientation === option.value
-                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-                          : 'bg-black/30 text-gray-400 hover:bg-black/50 border border-gray-700'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Situación Sentimental */}
-              <div>
-                <div className="text-sm text-gray-400 mb-2">Situación Sentimental (puedes seleccionar varios)</div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {[
-                    { value: 'pareja', label: 'En pareja' },
-                    { value: 'situationship', label: 'Situationship' },
-                    { value: 'crush', label: 'Con crush' },
-                    { value: 'soltero', label: 'Solterísimo' },
-                    { value: 'recien-terminado', label: 'Recién terminado' },
-                    { value: 'no-especificado', label: 'Limpiar selección' }
-                  ].map(option => {
-                    const isSelected = option.value === 'no-especificado'
-                      ? relationshipStatus.length === 0
-                      : relationshipStatus.includes(option.value);
-
-                    return (
-                      <button
-                        key={option.value}
-                        onClick={() => updateRelationshipStatus(option.value)}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                          isSelected
-                            ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-                            : 'bg-black/30 text-gray-400 hover:bg-black/50 border border-gray-700'
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
 
             {/* Agregar medicamento */}
