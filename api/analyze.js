@@ -431,7 +431,7 @@ El progreso NO tiene que ser siempre lineal. Opciones:
 - O tener un día medio y darse cuenta que "medio" es suficiente
 - CREATIVIDAD: inventa tu propio arco narrativo único
 
-CANTIDAD: 45-55 mensajes total. Distribuidos a lo largo del día (mañana, mediodía, tarde, noche). Dale espacio a la conversación para desarrollarse con calma.
+CANTIDAD: 30-35 mensajes total (más es riesgoso para el JSON). Distribuidos a lo largo del día (mañana, mediodía, tarde, noche).
 
 CRÍTICO: Los medicamentos NO deben sonar como doctores ni coaches. Deben sonar como roommates que casualmente saben de química.
 
@@ -468,7 +468,7 @@ REGLAS CRÍTICAS PARA EL JSON:
 4. NO uses comillas dobles dentro de "text", usa comillas simples
 5. ⚠️ NO INCLUYAS EMOJIS DENTRO DEL CAMPO "text" DE LOS MENSAJES (los emojis solo van en "emoji" de participants)
 6. Verifica que el último mensaje NO tenga coma trailing
-7. Objetivo: 45-55 mensajes (puedes llegar hasta 60 si la conversación lo necesita)
+7. Máximo 35 mensajes
 
 IMPORTANTE: Los emojis SOLO van en el campo "emoji" de participants. En el "text" de los mensajes NO uses emojis, usa texto normal.
 
