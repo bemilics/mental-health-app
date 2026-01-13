@@ -24,14 +24,28 @@
 
 /**
  * Analiza los medicamentos y genera personajes dinámicamente
- * basados en qué condiciones tratan esos medicamentos
+ * basados en qué condiciones tratan esos medicamentos.
+ * También infiere el trastorno más probable (INTERNO - nunca se menciona al usuario)
  */
 function analyzeSymptoms(medications) {
   const characters = new Set(['TÚ']); // Usuario siempre presente
   const medicationChars = [];
 
+  // Sistema de puntuación para inferir trastorno (INTERNO)
+  const disorderScores = {
+    depression: 0,
+    anxiety: 0,
+    adhd: 0,
+    bipolar: 0,
+    bpd: 0, // Borderline Personality Disorder
+    ocd: 0,
+    ptsd: 0,
+    insomnia: 0
+  };
+
   medications.forEach(med => {
     const name = med.name.toLowerCase();
+    const dosage = med.dosage;
 
     // Agregar el medicamento en sí como personaje
     medicationChars.push({
@@ -45,6 +59,19 @@ function analyzeSymptoms(medications) {
         name.includes('citalopram') || name.includes('fluvoxamin')) {
       characters.add('REGULACIÓN EMOCIONAL');
       characters.add('SISTEMA DE ALARMA');
+
+      // Inferencia de trastorno
+      disorderScores.depression += 2;
+      disorderScores.anxiety += 2;
+      disorderScores.ptsd += 1;
+
+      // Dosis altas sugieren OCD
+      if (dosage >= 80) {
+        disorderScores.ocd += 3;
+      }
+      if (dosage >= 150) {
+        disorderScores.ocd += 2; // Dosis muy altas = OCD más probable
+      }
     }
 
     // SNRIs - Inhibidores de recaptación de serotonina y noradrenalina
@@ -53,18 +80,33 @@ function analyzeSymptoms(medications) {
       characters.add('REGULACIÓN EMOCIONAL');
       characters.add('SISTEMA DE ALARMA');
       characters.add('CUERPO');
+
+      disorderScores.depression += 2;
+      disorderScores.anxiety += 2;
+      disorderScores.ptsd += 1;
     }
 
     // Gabapentinoides - Para ansiedad y dolor neuropático
     if (name.includes('pregabalin') || name.includes('gabapentin')) {
       characters.add('SISTEMA DE ALARMA');
       characters.add('CUERPO');
+
+      disorderScores.anxiety += 3;
+      disorderScores.ptsd += 1;
     }
 
     // Benzodiacepinas - Ansiolíticos
     if (name.includes('clonazepam') || name.includes('alprazolam') ||
         name.includes('lorazepam') || name.includes('diazepam')) {
       characters.add('SISTEMA DE ALARMA');
+
+      disorderScores.anxiety += 3;
+      disorderScores.ptsd += 1;
+
+      // Uso de benzos sugiere ansiedad severa o pánico
+      if (name.includes('alprazolam')) {
+        disorderScores.anxiety += 1; // Alprazolam más común en pánico
+      }
     }
 
     // Estimulantes - Para TDAH
@@ -72,6 +114,8 @@ function analyzeSymptoms(medications) {
         name.includes('dexanfetamin') || name.includes('anfetamin')) {
       characters.add('FUNCIÓN EJECUTIVA');
       characters.add('ENFOQUE');
+
+      disorderScores.adhd += 5;
     }
 
     // Estabilizadores del ánimo
@@ -79,6 +123,20 @@ function analyzeSymptoms(medications) {
         name.includes('valproat') || name.includes('carbamazepin')) {
       characters.add('REGULACIÓN EMOCIONAL');
       characters.add('ESTABILIZADOR DE ÁNIMO');
+
+      disorderScores.bipolar += 4;
+      disorderScores.bpd += 2;
+
+      // Litio es casi exclusivo de bipolar
+      if (name.includes('litio')) {
+        disorderScores.bipolar += 2;
+      }
+
+      // Lamotrigina común en bipolar depresivo
+      if (name.includes('lamotrigin')) {
+        disorderScores.bipolar += 1;
+        disorderScores.depression += 1;
+      }
     }
 
     // Antipsicóticos atípicos
@@ -86,6 +144,24 @@ function analyzeSymptoms(medications) {
         name.includes('aripiprazol') || name.includes('risperidon')) {
       characters.add('FILTRO DE REALIDAD');
       characters.add('REGULACIÓN EMOCIONAL');
+
+      // Dosis bajas (<100mg) sugieren BPD o uso coadyuvante
+      // Dosis altas (>=200mg) sugieren bipolar o psicosis
+      if (dosage < 100) {
+        disorderScores.bpd += 3;
+        disorderScores.depression += 1;
+        disorderScores.anxiety += 1;
+        disorderScores.bipolar += 1;
+      } else if (dosage >= 200) {
+        disorderScores.bipolar += 3;
+        disorderScores.bpd += 1;
+      } else {
+        // Dosis media (100-199mg)
+        disorderScores.bipolar += 2;
+        disorderScores.bpd += 2;
+      }
+
+      disorderScores.ocd += 1;
     }
 
     // Medicamentos para el sueño
@@ -95,12 +171,25 @@ function analyzeSymptoms(medications) {
       if (!name.includes('zolpidem') && !name.includes('zopiclone')) {
         characters.add('REGULACIÓN EMOCIONAL');
       }
+
+      disorderScores.insomnia += 2;
+      disorderScores.depression += 1;
+
+      // Trazodona y mirtazapina también antidepresivos
+      if (name.includes('trazodo') || name.includes('mirtazap')) {
+        if (dosage >= 100) {
+          disorderScores.depression += 2;
+        }
+      }
     }
 
     // Antidepresivos atípicos
     if (name.includes('bupropion')) {
       characters.add('REGULACIÓN EMOCIONAL');
       characters.add('ENFOQUE');
+
+      disorderScores.depression += 2;
+      disorderScores.adhd += 1;
     }
   });
 
@@ -110,14 +199,303 @@ function analyzeSymptoms(medications) {
     characters.add('CUERPO');
   }
 
+  // Determinar el trastorno más probable (INTERNO - nunca se menciona)
+  let primaryDisorder = 'general';
+  let maxScore = 0;
+
+  for (const [disorder, score] of Object.entries(disorderScores)) {
+    if (score > maxScore) {
+      maxScore = score;
+      primaryDisorder = disorder;
+    }
+  }
+
+  // Si el puntaje es muy bajo, es general
+  if (maxScore < 2) {
+    primaryDisorder = 'general';
+  }
+
   return {
     mentalAspects: Array.from(characters),
-    medications: medicationChars
+    medications: medicationChars,
+    primaryDisorder: primaryDisorder, // INTERNO - ajusta tono sin mencionarlo
+    disorderScores: disorderScores // Para debugging (opcional)
   };
 }
 
 /**
+ * Genera instrucciones de tono según el trastorno diagnosticado
+ * ⚠️ CRÍTICO: El diagnóstico es INTERNO. NUNCA se menciona explícitamente al usuario.
+ * Solo ajusta el tono, intensidad, y tipos de situaciones en la conversación.
+ */
+function getDisorderToneInstructions(disorder) {
+  const instructions = {
+    depression: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con depresión. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Baja energía y motivación ("no tengo ganas de nada", "todo me da igual")
+- Dificultad para levantarse o hacer tareas básicas
+- Anhedonia: cosas que antes gustaban ahora no
+- Procrastinación extrema ("lo haré mañana" x100)
+- Aislamiento social (cancelar planes, no contestar mensajes)
+- Culpa y autocrítica excesiva
+- Pensamientos negativos automáticos sobre sí mismo
+- Dormir mucho o muy poco
+- Problemas de concentración y memoria
+
+TONO DE LA CONVERSACIÓN:
+- Validar la dificultad sin minimizar ("sí, levantarse es una victoria real")
+- Celebrar micro-logros genuinamente (ducharse, comer, salir de la cama)
+- Reconocer que "pequeño" no es lo mismo que "fácil"
+- Menos presión sobre ser productivo, más sobre sobrevivir el día
+- Humor oscuro pero no nihilista
+- Interrumpir espirales de pensamientos negativos con gentileza
+- Los medicamentos comentan sobre timing ("necesito 4-6 semanas, aguanta")
+
+EVITAR:
+- "Solo sal y haz algo" (toxic positivity)
+- Comparaciones con otras personas
+- Presión por ser "productivo"
+- Minimizar el esfuerzo que requieren tareas básicas`,
+
+    anxiety: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con ansiedad. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Overthinking constante ("¿y si...?", "pero qué tal que...?")
+- Catastrofismo (peor escenario siempre)
+- Ansiedad anticipatoria (preocuparse por cosas que no han pasado)
+- Síntomas físicos (corazón acelerado, sudor, náusea, tensión)
+- Evitación de situaciones por miedo
+- Necesidad de control y certeza
+- Hipervigilancia en espacios públicos
+- Analizar cada interacción social en loop
+- Miedo al juicio de otros
+- Ataques de pánico o crisis de ansiedad
+
+TONO DE LA CONVERSACIÓN:
+- Sistema de Alarma es MUY activo (gritos, mayúsculas, dramatismo)
+- Otros personajes desmienten las catástrofes con humor pero con empatía
+- Medicamentos intervienen con timing ("espera 30 mins, estoy frenando esos pensamientos")
+- Validar que la ansiedad se siente real aunque sea irracional
+- Técnicas de grounding cuando escala mucho
+- Reconocer síntomas físicos y explicar por qué pasan
+- Interrumpir loops de overthinking con distracciones
+
+EVITAR:
+- "Cálmate" (nunca funciona)
+- "No es para tanto" (invalida la experiencia)
+- Minimizar síntomas físicos
+- Presión por "enfrentar miedos" sin apoyo`,
+
+    adhd: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con TDAH. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Dificultad extrema para iniciar tareas (paralysis by analysis)
+- Distraerse a medio camino de TODO
+- Olvidar cosas constantemente (llaves, citas, conversaciones)
+- Hiperfoco en cosas "wrong" (TikTok por 4 horas, no la tarea importante)
+- Impulsividad (compras, mensajes, decisiones)
+- Desorganización caótica (perder cosas, llegar tarde)
+- Estimulación constante (música, videos, múltiples pestañas)
+- Aburrimiento insoportable con tareas "aburridas"
+- Sensibilidad al rechazo (RSD - Rejection Sensitive Dysphoria)
+- Time blindness (no noción del tiempo)
+
+TONO DE LA CONVERSACIÓN:
+- Función Ejecutiva y Enfoque son CAOS TOTAL
+- Humor sobre olvidar cosas a los 5 minutos
+- Medicamentos comentan diferencia con/sin ellos
+- Celebrar cuando logran enfocarse aunque sea un rato
+- Reconocer frustración de "saber qué hacer pero no poder hacerlo"
+- Mensajes cortos y rápidos (match con la atención)
+- Conversaciones que saltan de tema naturalmente
+- Validar que no es "flojera", es neurodivergencia
+
+EVITAR:
+- "Solo concéntrate más" (literalmente no pueden)
+- "Haz una lista" sin reconocer que harán la lista y la perderán
+- Tono condescendiente sobre olvidos
+- Asumir que medicamentos "curan" todo`,
+
+    bipolar: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con trastorno bipolar. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Monitoreo de estado de ánimo (¿estoy normal o es un episodio?)
+- Estabilizador de Ánimo MUY presente previniendo extremos
+- Miedo a episodios (manía o depresión)
+- Dificultad para distinguir "yo" de "síntomas"
+- Importancia de rutinas (sueño, medicación, etc.)
+- Señales de advertencia (dormir poco, irritabilidad, euforia)
+- Consecuencias de episodios pasados (vergüenza, arrepentimiento)
+- Equilibrio delicado (ni muy arriba ni muy abajo)
+- Relaciones complicadas por la intensidad emocional
+
+TONO DE LA CONVERSACIÓN:
+- Estabilizador de Ánimo como el "guardián" vigilante
+- Regulación Emocional y Estabilizador trabajan juntos
+- Mencionar importancia de medicación (nunca saltársela)
+- Validar miedo a perder control
+- Celebrar estabilidad como logro activo (no pasivo)
+- Reconocer duelo por hipomanía ("extraño tener energía")
+- Tono de "vivir con" no "curado de"
+
+EVITAR:
+- Romantizar manía o hipomanía
+- Sugerir que pueden "controlar" episodios solo con voluntad
+- Minimizar importancia de medicación y rutinas
+- Estigma sobre "locura" o "inestabilidad"`,
+
+    bpd: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con trastorno límite de la personalidad. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Emociones INTENSAS que cambian rápido
+- Miedo al abandono (real o percibido)
+- Relaciones intensas e inestables
+- Idealización y devaluación de personas
+- Sentido difuso de identidad ("¿quién soy?")
+- Impulsividad en momentos de estrés
+- Vacío emocional crónico
+- Dificultad para regular emociones
+- Sensibilidad extrema al rechazo
+- Splitting (todo es blanco o negro)
+
+TONO DE LA CONVERSACIÓN:
+- Regulación Emocional lucha MUCHO (es agotador)
+- Validar intensidad emocional sin juzgar
+- Reconocer que sentir "demasiado" es exhausto
+- Medicamentos ayudan a "bajar el volumen" de emociones
+- Filtro de Realidad ayuda a cuestionar pensamientos extremos
+- Humor suave sobre la montaña rusa emocional
+- Apoyo sin enabling (validar sin reforzar)
+- Reconocer esfuerzo constante por regularse
+
+EVITAR:
+- Etiquetar como "dramático" o "exagerado"
+- Invalidar emociones intensas
+- Tono que sugiere que "eligen" sentir así
+- Minimizar miedo al abandono`,
+
+    ocd: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con TOC. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Pensamientos intrusivos perturbadores (egodistónicos)
+- Compulsiones (rituales para reducir ansiedad)
+- Duda obsesiva ("¿y si no cerré la puerta?" x100)
+- Pensamientos mágicos ("si no lo hago, pasará algo malo")
+- Sentido exagerado de responsabilidad
+- Necesidad de simetría, orden, o perfección
+- Rumiación mental (analizar pensamientos en loop)
+- Vergüenza por pensamientos intrusivos
+- Agotamiento mental constante
+- Sensibilidad a la contaminación o peligros
+
+TONO DE LA CONVERSACIÓN:
+- Sistema de Alarma en overdrive con pensamientos intrusivos
+- Regulación Emocional trata de racionalizar pero es difícil
+- Medicamentos (SSRIs en dosis alta) comentan sobre frenar loops
+- Validar que pensamientos intrusivos NO definen a la persona
+- Humor sobre compulsiones pero con empatía
+- Reconocer agotamiento de luchar contra pensamientos
+- Desafiar pensamientos mágicos gentilmente
+- No ridiculizar rituales (son estrategia de supervivencia)
+
+EVITAR:
+- "Solo ignora los pensamientos" (no funciona así)
+- Asumir que quieren los pensamientos intrusivos
+- Usar "TOC" como adjetivo para ser ordenado
+- Minimizar el agotamiento mental`,
+
+    ptsd: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con TEPT. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Hipervigilancia constante (escaneando amenazas)
+- Flashbacks o recuerdos intrusivos
+- Triggers (lugares, sonidos, olores, situaciones)
+- Evitación de cosas que recuerdan el trauma
+- Pesadillas recurrentes
+- Respuesta de sobresalto exagerada
+- Entumecimiento emocional (protección)
+- Sensación de estar en peligro constante
+- Dificultad para confiar
+- Disociación en momentos de estrés
+
+TONO DE LA CONVERSACIÓN:
+- Sistema de Alarma en modo máximo (detectando amenazas everywhere)
+- Cuerpo reportando tensión física constante
+- Medicamentos ayudan a bajar hipervigilancia
+- Validar que el mundo SE SIENTE peligroso aunque no lo sea
+- Reconocer flashbacks como real (no "solo recuerdos")
+- Grounding cuando hay disociación
+- Seguridad como tema recurrente
+- Evitar detalles del trauma
+
+EVITAR:
+- Preguntar sobre el trauma
+- "Ya pasó, estás a salvo ahora" (no se siente así)
+- Minimizar hipervigilancia
+- Presionar por "superar" o "perdonar"`,
+
+    insomnia: `
+
+🎭 AJUSTE DE TONO (INTERNO - NO MENCIONAR):
+El usuario está lidiando con insomnio. Ajusta la conversación así:
+
+TEMAS PRIORITARIOS:
+- Dificultad para conciliar el sueño
+- Despertares nocturnos frecuentes
+- Despertar muy temprano sin poder volver a dormir
+- Ansiedad sobre no poder dormir
+- Cansancio crónico durante el día
+- Irritabilidad por falta de sueño
+- Dificultad para concentrarse
+- Dependencia de ayudas para dormir
+- Frustración con "higiene del sueño" que no funciona
+- Scrolling nocturno desesperado
+
+TONO DE LA CONVERSACIÓN:
+- Ciclo de Sueño perpetuamente exhausto y frustrado
+- Medicamentos para sueño comentan sobre efectos
+- Validar que "solo duerme" no es tan simple
+- Reconocer ansiedad sobre no dormir que empeora insomnio
+- Humor sobre scrolling a las 3am
+- Empatía con cansancio crónico
+- No presionar por "solo relájate"
+
+EVITAR:
+- Consejos básicos de higiene del sueño (ya los conocen)
+- "Solo apaga el teléfono" (ojalá fuera tan fácil)
+- Minimizar impacto del cansancio crónico`,
+
+    general: ``
+  };
+
+  return instructions[disorder] || instructions.general;
+}
+
+/**
  * Genera el prompt para Claude API con personajes dinámicos
+ * y ajusta el tono según el trastorno diagnosticado (interno)
  */
 function generatePrompt(medications, analysis, userProfile = {}) {
   const medList = medications
@@ -126,6 +504,7 @@ function generatePrompt(medications, analysis, userProfile = {}) {
 
   const mentalAspectsList = analysis.mentalAspects.join(', ');
   const medicationsList = analysis.medications.map(m => m.name).join(', ');
+  const primaryDisorder = analysis.primaryDisorder || 'general';
 
   // Construir contexto de perfil si está disponible
   let profileContext = '';
@@ -167,10 +546,13 @@ function generatePrompt(medications, analysis, userProfile = {}) {
     profileContext += '\n\n⚠️ USA ESTA INFORMACIÓN para personalizar los temas de conversación (especialmente en el 35% de social/romantic anxiety). Ajusta pronombres, referencias románticas, y situaciones según corresponda. PERO RECUERDA: Sin emojis en el campo "text".';
   }
 
+  // Generar instrucciones de tono según el trastorno diagnosticado (INTERNO - nunca mencionar el diagnóstico)
+  const disorderToneInstructions = getDisorderToneInstructions(primaryDisorder);
+
   return `Genera una conversación de chat grupal sobre medicación psiquiátrica. El tono debe ser EXACTAMENTE como un grupo de WhatsApp entre amigos Gen Z, NO como Slack de desarrolladores.
 
 MEDICAMENTOS:
-${medList}${profileContext}
+${medList}${profileContext}${disorderToneInstructions}
 
 PARTICIPANTES:
 Aspectos mentales: ${mentalAspectsList}
