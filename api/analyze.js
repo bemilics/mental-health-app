@@ -623,8 +623,35 @@ export default async function handler(req, res) {
       });
     }
 
-    // Llamar a la API de Anthropic
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    // Función de retry para manejar errores de red transitorios
+    const fetchWithRetry = async (url, options, maxRetries = 2) => {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`🌐 Intentando llamada a API (intento ${attempt}/${maxRetries})...`);
+          const response = await fetch(url, options);
+          console.log(`✅ Llamada exitosa en intento ${attempt}`);
+          return response;
+        } catch (error) {
+          const isLastAttempt = attempt === maxRetries;
+
+          // Si es un error de red/socket y no es el último intento, reintentar
+          if ((error.code === 'UND_ERR_SOCKET' || error.message.includes('fetch failed')) && !isLastAttempt) {
+            console.log(`⚠️ Error de red en intento ${attempt}, reintentando en 2 segundos...`);
+            console.log(`Error: ${error.message}`);
+            // Esperar 2 segundos antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            continue;
+          }
+
+          // Si es el último intento o un error diferente, lanzar el error
+          console.error(`❌ Error en intento ${attempt}:`, error.message);
+          throw error;
+        }
+      }
+    };
+
+    // Llamar a la API de Anthropic con retry automático
+    const response = await fetchWithRetry("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
